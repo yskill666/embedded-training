@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>嵌入式协会 · 新生培训套件 · 总主页</title>
+<style>
+/* ══════════ 苏式构成主义 · 培训套件总主页 ══════════
+   红 / 黑 / 奶油纸面 · 对角楔形 · 红星 · 数学网格 · 硬阴影
+   与三个子教程共享几何 DNA，配色各有身份：Git 苏式红黑 / VSCode 蓝 / C 瑞士红 */
+:root{
+  --paper:#EDE4D0; --paper2:#E2D6BC; --card:#F5EFE0;
+  --ink:#161210; --ink2:#4A4132; --gray:#8F8064; --hair:#D2C4A4;
+  --red:#B71C1C; --red2:#E8491F; --gold:#E8B33A;
+  --blue:#2653D6; --cred:#D92323;
+  --sans:"Helvetica Neue",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  --mono:"Cascadia Code",Consolas,"Courier New",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.7;overflow-x:hidden}
+a{color:var(--red)}
+::selection{background:var(--red);color:var(--paper)}
+.wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+.mono{font-family:var(--mono)}
+
+/* 进度条 */
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:var(--red);z-index:100}
+
+/* 顶栏 */
+.topbar{border-bottom:2px solid var(--ink);background:var(--paper)}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:13px;padding-bottom:13px;font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase}
+.topbar .dot{display:inline-block;width:11px;height:11px;background:var(--red);border-radius:50%;margin-right:9px;vertical-align:-1px}
+.topbar span:last-child{color:var(--gray)}
+
+/* 几何基元 */
+.shape{position:absolute;pointer-events:none;z-index:1}
+.anim-float{animation:float 6s ease-in-out infinite}
+.anim-float2{animation:float 7.5s ease-in-out 1s infinite}
+.anim-spin{animation:spin 28s linear infinite}
+.anim-spin-rev{animation:spin-rev 36s linear infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes spin-rev{to{transform:rotate(-360deg)}}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* Hero */
+.hero{position:relative;border-bottom:2px solid var(--ink);overflow:hidden;background-image:linear-gradient(var(--paper2) 1px,transparent 1px),linear-gradient(90deg,var(--paper2) 1px,transparent 1px);background-size:46px 46px}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding-top:84px;padding-bottom:92px}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:11px;margin-bottom:22px}
+.kicker::before{content:"";width:13px;height:13px;background:var(--red)}
+.hero h1{font-size:clamp(2.8rem,6.4vw,5rem);line-height:1.04;font-weight:900;letter-spacing:.01em;margin-bottom:24px}
+.redblock{display:inline-block;background:var(--red);color:var(--paper);padding:2px 16px;transform:rotate(-1.5deg);box-shadow:6px 6px 0 var(--ink)}
+.hero .lead{font-size:17px;color:var(--ink2);max-width:30em;margin-bottom:30px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:34px}
+.hero-meta span{font-family:var(--mono);font-size:12.5px;border:2px solid var(--ink);background:var(--card);padding:5px 13px;box-shadow:3px 3px 0 var(--ink)}
+.hero-meta span b{color:var(--red)}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:15px;text-decoration:none;border:2px solid var(--ink);padding:13px 26px;box-shadow:5px 5px 0 var(--ink);transition:transform .15s,box-shadow .15s;cursor:pointer;font-family:var(--sans)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn-red{background:var(--red);color:var(--paper)}
+.btn-line{background:var(--card);color:var(--ink)}
+
+/* Hero 右侧构成主义几何 + 路径终端 */
+.hero-art{position:relative;height:430px}
+.ha-wedge{width:330px;height:330px;background:var(--red);clip-path:polygon(0 0,100% 0,0 100%);top:-26px;right:-30px;opacity:.94}
+.ha-ring{width:172px;height:172px;border:20px solid var(--ink);border-radius:50%;bottom:18px;right:44px}
+.ha-star{width:118px;height:118px;background:var(--red);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);top:-18px;left:24px}
+.ha-bar{width:210px;height:26px;background:var(--ink);bottom:96px;left:-10px;transform:rotate(-24deg)}
+.ha-dot{width:30px;height:30px;background:var(--gold);border:2px solid var(--ink);border-radius:50%;top:150px;left:6px}
+.path-card{position:absolute;left:0;right:34px;top:120px;z-index:3;background:var(--ink);border:2px solid var(--ink);box-shadow:11px 11px 0 var(--red)}
+.path-bar{display:flex;align-items:center;gap:7px;padding:10px 15px;background:#211C14;border-bottom:2px solid #3A372F}
+.path-bar i{width:11px;height:11px;border-radius:50%;flex:none}
+.path-bar i:nth-child(1){background:var(--red2)} .path-bar i:nth-child(2){background:var(--gold)} .path-bar i:nth-child(3){background:var(--blue)}
+.path-bar span{font-family:var(--mono);font-size:11.5px;color:var(--gray);margin-left:8px;letter-spacing:.1em}
+.path-body{padding:18px 20px 22px;font-family:var(--mono);font-size:13.5px;line-height:2.05;color:var(--paper2);min-height:172px}
+.path-body .pl{display:flex;gap:12px;align-items:baseline}
+.path-body .pn{color:var(--red2);font-weight:700}
+.path-body .ok{color:var(--gold)}
+.path-body .dim{color:var(--gray)}
+.cursor{display:inline-block;width:8px;height:15px;background:var(--gold);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+
+/* 跑马灯 */
+.ticker{background:var(--ink);border-bottom:2px solid var(--ink);overflow:hidden;padding:12px 0}
+.ticker-track{display:inline-flex;white-space:nowrap;animation:marquee 30s linear infinite;will-change:transform}
+.ticker span{font-family:var(--mono);font-size:13.5px;letter-spacing:.2em;color:var(--paper);padding:0 20px}
+.ticker b{color:var(--red2);font-weight:400}
+
+/* 章节头 */
+.sec{padding:84px 0;position:relative}
+.sec-head{margin-bottom:46px;position:relative;z-index:2}
+.sec-head .kicker{margin-bottom:14px}
+.sec-head h2{font-size:clamp(1.9rem,4vw,2.7rem);font-weight:900;line-height:1.1}
+.sec-head .rule{width:88px;height:6px;background:var(--red);margin-top:18px}
+.sec-head p.desc{color:var(--ink2);font-size:15.5px;max-width:44em;margin-top:18px}
+
+/* 套件卡片网格 */
+.suite{display:grid;grid-template-columns:repeat(2,1fr);gap:30px;position:relative;z-index:2}
+.tut{position:relative;background:var(--card);border:2px solid var(--ink);box-shadow:8px 8px 0 var(--ink);padding:0;display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s;overflow:hidden;text-decoration:none;color:var(--ink)}
+.tut:hover{transform:translate(-4px,-4px);box-shadow:12px 12px 0 var(--ink)}
+.tut-accent{height:12px;background:var(--ac,var(--red));border-bottom:2px solid var(--ink)}
+.tut-body{padding:28px 30px 30px;display:flex;flex-direction:column;flex:1;position:relative}
+.tut-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}
+.tut-no{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.18em;color:var(--ac,var(--red));text-transform:uppercase}
+.tut-icon{width:54px;height:54px;flex:none;position:relative}
+.ti-git{background:var(--red);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.ti-vs{background:var(--blue);clip-path:polygon(0 0,100% 0,100% 72%,72% 72%,72% 100%,0 100%)}
+.ti-c{background:var(--cred);border-radius:50%;border:6px solid var(--ink)}
+.ti-mcu{background:var(--gray);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.tut h3{font-size:23px;font-weight:900;line-height:1.2;margin-bottom:10px}
+.tut .en{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:14px}
+.tut p{font-size:14.5px;color:var(--ink2);flex:1;margin-bottom:20px}
+.tut-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px}
+.tut-tags span{font-family:var(--mono);font-size:11.5px;border:1.5px solid var(--ink);padding:2px 9px;background:var(--paper)}
+.tut-btn{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px;border:2px solid var(--ink);padding:10px 20px;background:var(--ac,var(--red));color:var(--paper);box-shadow:4px 4px 0 var(--ink);transition:transform .15s,box-shadow .15s}
+.tut:hover .tut-btn{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.tut-foot{font-family:var(--mono);font-size:11px;color:var(--gray);letter-spacing:.08em;margin-top:16px}
+
+/* 单片机预留卡 */
+.tut.soon{background:var(--paper2);border-style:dashed;box-shadow:8px 8px 0 var(--hair);cursor:default}
+.tut.soon:hover{transform:none;box-shadow:8px 8px 0 var(--hair)}
+.tut.soon .tut-accent{background:repeating-linear-gradient(-45deg,var(--gray) 0 12px,var(--paper2) 12px 24px)}
+.tut.soon h3{color:var(--ink2)}
+.tut.soon .tut-btn{background:var(--paper);color:var(--gray);border-style:dashed;border-color:var(--gray);box-shadow:none;cursor:not-allowed}
+.tut.soon:hover .tut-btn{transform:none;box-shadow:none}
+.soon-stamp{position:absolute;top:20px;right:-40px;transform:rotate(38deg);background:var(--gold);border:2px solid var(--ink);font-family:var(--mono);font-weight:700;font-size:11px;letter-spacing:.16em;padding:4px 44px;color:var(--ink)}
+
+/* 学习路径条 */
+.pathline{display:flex;align-items:stretch;gap:0;border:2px solid var(--ink);background:var(--card);box-shadow:7px 7px 0 var(--ink);margin-top:54px;flex-wrap:wrap;position:relative;z-index:2}
+.pl-step{flex:1;min-width:160px;padding:20px 22px;border-right:2px solid var(--ink);position:relative}
+.pl-step:last-child{border-right:none}
+.pl-step .n{font-family:var(--mono);font-weight:700;font-size:28px;color:var(--ac,var(--red));line-height:1}
+.pl-step .t{font-weight:800;font-size:15px;margin-top:8px}
+.pl-step .d{font-size:12.5px;color:var(--gray);margin-top:3px}
+.pl-step.dim .n{color:var(--gray)}
+.pl-step.dim .t{color:var(--ink2)}
+
+/* 关于 */
+.about{background:var(--ink);color:var(--paper);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.about .sec-head h2{color:var(--paper)}
+.about .sec-head .kicker{color:var(--gold)}
+.about .sec-head .kicker::before{background:var(--gold)}
+.about .sec-head .rule{background:var(--gold)}
+.about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:2px solid var(--paper2);position:relative;z-index:2}
+.about-grid div{padding:26px 28px;border-right:1px solid #3A372F}
+.about-grid div:last-child{border-right:none}
+.about-grid b{display:block;font-size:16px;color:var(--gold);margin-bottom:10px}
+.about-grid p{font-size:14px;color:var(--paper2)}
+
+/* 页脚 */
+footer{background:var(--ink);color:var(--paper2);padding:54px 0 36px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+footer h6{font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+footer p{font-size:13.5px;color:var(--paper2);line-height:1.8}
+.swatches{display:flex;gap:6px;margin-top:14px}
+.swatches div{width:34px;height:34px;border:1px solid rgba(255,255,255,.18)}
+.foot-line{border-top:1px solid #3A372F;margin-top:40px;padding-top:20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gray)}
+
+/* 回到顶部 */
+#toTop{position:fixed;right:24px;bottom:24px;width:48px;height:48px;background:var(--red);color:var(--paper);font-size:20px;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);cursor:pointer;z-index:80;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .3s,transform .3s}
+#toTop.show{opacity:1;pointer-events:auto;transform:none}
+
+/* 滚动显现 */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,1,.36,1)}
+.rv.on{opacity:1;transform:none}
+
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr;gap:44px;padding-top:60px;padding-bottom:64px}
+  .hero-art{height:380px;max-width:520px}
+  .suite{grid-template-columns:1fr}
+  .about-grid{grid-template-columns:1fr}
+  .about-grid div{border-right:none;border-bottom:1px solid #3A372F}
+  .about-grid div:last-child{border-bottom:none}
+  .foot-grid{grid-template-columns:1fr}
+  .topbar .wrap{flex-direction:column;align-items:flex-start;gap:3px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <div class="wrap">
+    <span><span class="dot"></span>嵌入式协会 · EMBEDDED CLUB</span>
+    <span>TRAINING SUITE — 总入口 / HOME</span>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="kicker">新生培训系列 · 桌面长期维护</p>
+      <h1>嵌入式协会<br><span class="redblock">新生培训</span></h1>
+      <p class="lead">从注册 GitHub、搭好 VSCode，到系统学完 C 语言，再迈向单片机。一个主页，串起整条新生成长路线 —— 点下面的卡片进入对应教程。</p>
+      <div class="hero-meta">
+        <span><b>03</b> 门已就绪</span>
+        <span><b>01</b> 门待增补</span>
+        <span>风格 · 苏式构成主义</span>
+      </div>
+      <div class="hero-cta">
+        <a class="btn btn-red" href="#suite">进入培训套件 →</a>
+        <a class="btn btn-line" href="#path">查看学习路径</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="shape ha-wedge"></div>
+      <div class="shape ha-ring anim-spin-rev"></div>
+      <div class="shape ha-star anim-float"></div>
+      <div class="shape ha-bar"></div>
+      <div class="shape ha-dot anim-float2"></div>
+      <div class="path-card">
+        <div class="path-bar"><i></i><i></i><i></i><span>roadmap.sh — 新生成长路线</span></div>
+        <div class="path-body" id="pathBody"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack">
+    <span>代码要亲手敲一遍 <b>★</b> 实践是检验真理的唯一标准 <b>★</b> 报错先读提示信息 <b>★</b> 创建变量就初始化 <b>★</b> 每天进步一字节 <b>★</b>&nbsp;</span>
+    <span>代码要亲手敲一遍 <b>★</b> 实践是检验真理的唯一标准 <b>★</b> 报错先读提示信息 <b>★</b> 创建变量就初始化 <b>★</b> 每天进步一字节 <b>★</b>&nbsp;</span>
+  </div>
+</div>
+
+<main>
+  <section class="sec" id="suite">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="kicker">Training Suite / 培训套件</p>
+        <h2>四门课程，一条路线</h2>
+        <div class="rule"></div>
+        <p class="desc">三个界面共享同一套几何视觉语言（硬阴影 · 数学网格 · 几何基元），却各有配色身份：<b>Git 苏式红黑</b>、<b>VSCode 蓝图蓝</b>、<b>C 语言瑞士红</b>。相似而不相同，认得清也分得开。</p>
+      </div>
+
+      <div class="suite">
+        <a class="tut rv" href="GitHub注册与Git安装配置教程.html" style="--ac:var(--red)">
+          <div class="tut-accent"></div>
+          <div class="tut-body">
+            <div class="tut-top">
+              <span class="tut-no">01 · 协作入口</span>
+              <span class="tut-icon ti-git"></span>
+            </div>
+            <h3>Git × GitHub 入门</h3>
+            <span class="en">Setup Guide · Soviet Constructivism</span>
+            <p>注册 GitHub 账号、安装 Git、完成身份与 SSH 密钥配置。三步打通现代协作开发的入口，为多人协作与代码托管做好准备。</p>
+            <div class="tut-tags"><span>零基础友好</span><span>Windows 优先</span><span>约 30 分钟</span></div>
+            <span class="tut-btn">进入教程 →</span>
+            <span class="tut-foot">苏式构成主义 · 红 / 黑 / 奶油</span>
+          </div>
+        </a>
+
+        <a class="tut rv" href="C语言学习前导与VSCode环境配置.html" style="--ac:var(--blue)">
+          <div class="tut-accent"></div>
+          <div class="tut-body">
+            <div class="tut-top">
+              <span class="tut-no" style="color:var(--blue)">02 · 开发环境</span>
+              <span class="tut-icon ti-vs"></span>
+            </div>
+            <h3>C 语言前导 × VSCode 配置</h3>
+            <span class="en">Environment · Color-scale Blue</span>
+            <p>认识编译器与编辑器，装好 VSCode 与 MinGW，配置 C/C++ 扩展，跑通第一个程序。把写代码的工具链一次搭到位。</p>
+            <div class="tut-tags"><span>环境搭建</span><span>MinGW</span><span>第一个程序</span></div>
+            <span class="tut-btn" style="background:var(--blue)">进入教程 →</span>
+            <span class="tut-foot">色阶几何主义 · 蓝图蓝</span>
+          </div>
+        </a>
+
+        <a class="tut rv" href="../C语言培训/C语言学习教程.html" style="--ac:var(--cred)">
+          <div class="tut-accent" style="background:var(--cred)"></div>
+          <div class="tut-body">
+            <div class="tut-top">
+              <span class="tut-no" style="color:var(--cred)">03 · 语言基础</span>
+              <span class="tut-icon ti-c"></span>
+            </div>
+            <h3>C 语言学习教程</h3>
+            <span class="en">C Language · Swiss × Soviet</span>
+            <p>从第一个程序到指针与递归：58 章 · 17 模块 · 3 场考核，含缓冲区模拟器、图形生成器、汉诺塔递归可视化。桌面长期维护，持续增补。</p>
+            <div class="tut-tags"><span>58 章</span><span>17 模块</span><span>3 场考核</span></div>
+            <span class="tut-btn" style="background:var(--cred)">进入教程 →</span>
+            <span class="tut-foot">瑞士国际主义 × 苏联美学 · 红</span>
+          </div>
+        </a>
+
+        <div class="tut soon rv" style="--ac:var(--gray)" aria-disabled="true">
+          <div class="tut-accent"></div>
+          <div class="soon-stamp">敬请期待</div>
+          <div class="tut-body">
+            <div class="tut-top">
+              <span class="tut-no" style="color:var(--gray)">04 · 硬件进阶</span>
+              <span class="tut-icon ti-mcu"></span>
+            </div>
+            <h3>单片机学习</h3>
+            <span class="en">MCU / STM32 · Coming Soon</span>
+            <p>预留入口：学完 C 语言与编译器基础后，进入 STM32 单片机开发 —— 寄存器、GPIO、串口、中断，把代码烧进真实硬件。</p>
+            <div class="tut-tags"><span>待增补</span><span>STM32</span><span>嵌入式</span></div>
+            <span class="tut-btn">敬请期待 · 待增补</span>
+            <span class="tut-foot">按键已预留 · 内容随后跟上</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="path" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="kicker">Learning Path / 学习路径</p>
+        <h2>建议顺序</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="pathline rv">
+        <div class="pl-step" style="--ac:var(--red)"><div class="n">01</div><div class="t">Git × GitHub</div><div class="d">先有协作与托管</div></div>
+        <div class="pl-step" style="--ac:var(--blue)"><div class="n">02</div><div class="t">VSCode 环境</div><div class="d">搭好工具链</div></div>
+        <div class="pl-step" style="--ac:var(--cred)"><div class="n">03</div><div class="t">C 语言教程</div><div class="d">打牢语言基础</div></div>
+        <div class="pl-step dim"><div class="n">04</div><div class="t">单片机</div><div class="d">敬请期待</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec about" id="about">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="kicker">About / 关于本套件</p>
+        <h2>维护与归档约定</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="about-grid rv">
+        <div><b>桌面长期维护</b><p>本套件在桌面长期维护增补。C 语言教程按约定保留在 <span class="mono">C语言培训\</span> 文件夹，主页以相对链接引入，不提前移动。</p></div>
+        <div><b>归档门槛</b><p>学完结构体与指针之前的全部内容、进入编译器学习阶段后，方可整体归档至资料库 <span class="mono">05_嵌入式开发\01_培训与教程\</span>。</p></div>
+        <div><b>后续路线</b><p>C 语言之后：动态内存 → 预处理深入 → 文件操作 → 编译器学习，再进入单片机。第四张卡片已为此预留。</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h6>嵌入式协会 · 新生培训套件</h6>
+        <p>一个主页串起 Git 协作、VSCode 环境、C 语言基础与未来的单片机学习。三个子界面相似而不相同，共享几何视觉语言，各有配色身份。</p>
+      </div>
+      <div>
+        <h6>设计语言</h6>
+        <p>苏式构成主义 · 红黑海报几何<br>数学网格 · 硬阴影 · 红星与对角楔形</p>
+        <div class="swatches">
+          <div style="background:#B71C1C" title="Soviet Red"></div>
+          <div style="background:#161210" title="Ink"></div>
+          <div style="background:#EDE4D0" title="Cream"></div>
+          <div style="background:#2653D6" title="VSCode Blue"></div>
+          <div style="background:#D92323" title="C Swiss Red"></div>
+        </div>
+      </div>
+      <div>
+        <h6>套件文件</h6>
+        <p>Git 教程 · 同目录<br>VSCode 教程 · 同目录<br>C 语言教程 · <span class="mono">../C语言培训/</span><br>单片机 · 待增补</p>
+      </div>
+    </div>
+    <div class="foot-line">
+      <span>EMBEDDED CLUB — TRAINING SUITE</span>
+      <span>RED · BLACK · CREAM · CONSTRUCTIVISM</span>
+    </div>
+  </div>
+</footer>
+
+<button id="toTop" type="button" aria-label="回到顶部">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* 进度条 + 回到顶部 */
+  var bar = document.getElementById("progress");
+  var toTop = document.getElementById("toTop");
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + "%";
+    toTop.classList.toggle("show", h.scrollTop > 500);
+  }
+  window.addEventListener("scroll", onScroll, {passive:true});
+  onScroll();
+  toTop.addEventListener("click", function(){ window.scrollTo({top:0, behavior: reduced ? "auto" : "smooth"}); });
+
+  /* 跑马灯无缝 */
+  var ticker = document.getElementById("tickerTrack");
+  ticker.innerHTML += ticker.innerHTML;
+
+  /* 滚动显现 */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("on"); io.unobserve(e.target); } });
+  }, {threshold:.12});
+  document.querySelectorAll(".rv").forEach(function(el){ io.observe(el); });
+
+  /* Hero 路径终端打字 */
+  var term = document.getElementById("pathBody");
+  var lines = [
+    {n:"01", t:"Git × GitHub", s:"ok", tail:"协作入口 ✓"},
+    {n:"02", t:"VSCode 环境", s:"ok", tail:"工具链 ✓"},
+    {n:"03", t:"C 语言教程", s:"ok", tail:"58 章 ✓"},
+    {n:"04", t:"单片机 STM32", s:"dim", tail:"敬请期待…"}
+  ];
+  var cursor = document.createElement("span");
+  cursor.className = "cursor";
+  function renderLine(l){
+    var d = document.createElement("div");
+    d.className = "pl";
+    d.innerHTML = '<span class="pn">' + l.n + '</span><span>' + l.t + '</span><span class="' + l.s + '" style="margin-left:auto">' + l.tail + '</span>';
+    return d;
+  }
+  if(reduced){
+    lines.forEach(function(l){ term.appendChild(renderLine(l)); });
+    term.lastChild.appendChild(cursor);
+  } else {
+    var li = 0;
+    function next(){
+      if(li >= lines.length){ term.lastChild.appendChild(cursor); return; }
+      var l = lines[li];
+      var d = renderLine(l);
+      d.style.opacity = "0";
+      term.appendChild(d);
+      requestAnimationFrame(function(){ d.style.transition = "opacity .4s"; d.style.opacity = "1"; });
+      li++;
+      setTimeout(next, 480);
+    }
+    setTimeout(next, 500);
+  }
+})();
+</script>
+</body>
+</html>

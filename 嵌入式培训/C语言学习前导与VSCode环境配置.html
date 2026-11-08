@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C 语言 × VSCode · 环境搭建第一步</title>
+<style>
+/* ============ 色阶理论配色 ============
+   主色阶·蓝：构建信息层级（900 标题 / 600 交互 / 100 底色）
+   中性阶·墨：纸面、正文与终端
+   点缀阶·朱红 / 明黄：仅用于几何装饰，面积 < 10% */
+:root{
+  --b50:#EEF3FF; --b100:#DCE7FD; --b200:#BAD0FB; --b300:#8FAFF7; --b400:#628CF0;
+  --b500:#3D6BE5; --b600:#2653D6; --b700:#1F43AD; --b800:#1D398A; --b900:#1C326E; --b950:#131F45;
+  --n0:#FFFFFF; --n50:#F7F5F0; --n100:#EFECE5; --n200:#E0DCD2; --n300:#C6C1B4;
+  --n400:#9A9488; --n500:#6F6A5E; --n600:#4E4A41; --n700:#36332D; --n800:#242220; --n900:#171614;
+  --r100:#FBE4DE; --r300:#F2A08E; --r500:#E1502F; --r700:#B23A20;
+  --y100:#FFF3C2; --y300:#FFDE7A; --y500:#F4B400; --y700:#C08E00;
+  --mono:"Cascadia Code","JetBrains Mono",Consolas,"Courier New",monospace;
+  --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--n50);color:var(--n900);font-family:var(--sans);line-height:1.75;overflow-x:hidden}
+h1,h2,h3{line-height:1.3;font-weight:800}
+a{color:var(--b600)}
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+::selection{background:var(--y300);color:var(--n900)}
+
+/* ============ 几何图形基元 ============ */
+.shape{position:absolute;pointer-events:none;z-index:1}
+.sh-circle{border-radius:50%}
+.sh-donut{border-radius:50%;background:transparent!important}
+.sh-tri{clip-path:polygon(50% 0,100% 100%,0 100%)}
+.sh-half{border-radius:999px 999px 0 0}
+.sh-sq{transform:rotate(12deg)}
+.anim-float{animation:float 5s ease-in-out infinite}
+.anim-float2{animation:float 6.5s ease-in-out 1s infinite}
+.anim-spin{animation:spin 24s linear infinite}
+.anim-spin-rev{animation:spin-rev 30s linear infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes spin-rev{to{transform:rotate(-360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes travel{to{left:calc(100% - 12px)}}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+/* ============ 滚动进度 & 导航 ============ */
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:var(--b600);z-index:100}
+.nav{position:sticky;top:0;z-index:90;background:rgba(247,245,240,.88);backdrop-filter:blur(10px);border-bottom:2px solid var(--n900)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;text-decoration:none;color:var(--n900);white-space:nowrap}
+.logo-mark{display:inline-flex;align-items:center;gap:4px}
+.logo-mark i{width:13px;height:13px;display:block}
+.logo-mark i:nth-child(1){background:var(--b600)}
+.logo-mark i:nth-child(2){background:var(--r500);border-radius:50%}
+.logo-mark i:nth-child(3){background:var(--y500);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.logo small{font-family:var(--mono);font-size:10px;color:var(--n500);letter-spacing:.15em;font-weight:400}
+.nav-links{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{font-size:14px;font-weight:600;color:var(--n600);text-decoration:none;padding:6px 12px;white-space:nowrap;transition:background .2s,color .2s}
+.nav-links a:hover{background:var(--b100);color:var(--b700)}
+.nav-links a.active{background:var(--n900);color:var(--n50)}
+
+/* ============ Hero ============ */
+.hero{position:relative;padding:88px 0 96px;background-image:linear-gradient(var(--n100) 1px,transparent 1px),linear-gradient(90deg,var(--n100) 1px,transparent 1px);background-size:44px 44px;border-bottom:2px solid var(--n900);overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;position:relative;z-index:2}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.28em;color:var(--b600);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.kicker::before{content:"";width:12px;height:12px;background:var(--b600)}
+.hero h1{font-size:clamp(2.6rem,6vw,4.6rem);letter-spacing:.01em;margin-bottom:20px}
+.hero h1 em{font-style:normal;color:var(--r500)}
+.hero h1 .hl{background:linear-gradient(transparent 58%,var(--y300) 58%);padding:0 6px}
+.hero p.lead{font-size:17px;color:var(--n600);max-width:32em;margin-bottom:26px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+.chip{font-family:var(--mono);font-size:12.5px;border:2px solid var(--n900);background:var(--n0);padding:4px 12px;box-shadow:3px 3px 0 var(--n900)}
+.chip.c-b{background:var(--b100)} .chip.c-r{background:var(--r100)} .chip.c-y{background:var(--y100)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;text-decoration:none;border:2px solid var(--n900);padding:12px 24px;box-shadow:5px 5px 0 var(--n900);transition:transform .15s,box-shadow .15s;cursor:pointer;font-family:var(--sans)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--n900)}
+.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--n900)}
+.btn-primary{background:var(--b600);color:#fff}
+.btn-ghost{background:var(--n0);color:var(--n900)}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap}
+
+/* Hero 右侧几何构成 + 终端 */
+.hero-art{position:relative;height:460px}
+.term-card{position:absolute;left:0;right:0;top:96px;z-index:3;background:var(--n900);border:2px solid var(--n900);box-shadow:10px 10px 0 var(--b600)}
+.term-bar{display:flex;align-items:center;gap:7px;padding:10px 14px;background:var(--n800);border-bottom:2px solid var(--n700)}
+.dot{width:11px;height:11px;border-radius:50%;flex:none}
+.dot.r{background:var(--r500)} .dot.y{background:var(--y500)} .dot.b{background:var(--b500)}
+.term-title{font-family:var(--mono);font-size:11.5px;color:var(--n400);margin-left:8px}
+.term-body{padding:18px 18px 22px;font-family:var(--mono);font-size:13.5px;line-height:2;min-height:200px;color:var(--n300)}
+.tl-cmd{color:var(--b300)} .tl-out{color:var(--n300)} .tl-ok{color:var(--y300)}
+.cursor{display:inline-block;width:8px;height:16px;background:var(--y300);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+.ha-donut{width:150px;height:150px;border:16px solid var(--b500);top:-16px;right:6px}
+.ha-tri{width:96px;height:86px;background:var(--y500);bottom:6px;left:14px}
+.ha-half{width:120px;height:60px;background:var(--r500);top:34px;left:-14px;transform:rotate(-90deg)}
+.ha-sq{width:34px;height:34px;background:var(--n900);bottom:34px;right:52px}
+.ha-plus{width:44px;height:44px;top:8px;left:44%}
+.ha-plus::before,.ha-plus::after{content:"";position:absolute;background:var(--b700)}
+.ha-plus::before{left:50%;top:0;width:10px;height:100%;transform:translateX(-50%)}
+.ha-plus::after{top:50%;left:0;height:10px;width:100%;transform:translateY(-50%)}
+.ha-dots{width:110px;height:70px;bottom:-6px;right:-4px;background-image:radial-gradient(var(--n400) 2.2px,transparent 2.2px);background-size:16px 16px}
+
+/* ============ 跑马灯 ============ */
+.ticker{background:var(--b600);border-bottom:2px solid var(--n900);overflow:hidden;padding:11px 0}
+.ticker-track{display:inline-flex;white-space:nowrap;animation:marquee 26s linear infinite;will-change:transform}
+.ticker span{font-family:var(--mono);font-size:13.5px;letter-spacing:.18em;color:#fff;padding:0 18px}
+.ticker b{color:var(--y300);font-weight:400}
+
+/* ============ 章节通用 ============ */
+.block{padding:92px 0;scroll-margin-top:76px;position:relative;overflow:hidden}
+.block.alt{background:var(--n0)}
+.sec-head{display:flex;align-items:center;gap:22px;margin-bottom:48px;position:relative;z-index:2}
+.sec-index{width:64px;height:64px;flex:none;display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:23px;background:var(--b600);color:#fff;border:2px solid var(--n900);box-shadow:5px 5px 0 var(--n900);transform:rotate(-4deg)}
+.sec-kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.26em;color:var(--b600);text-transform:uppercase;margin-bottom:4px}
+.sec-head h2{font-size:clamp(1.6rem,3.4vw,2.1rem)}
+.sec-desc{color:var(--n600);max-width:46em;margin:-28px 0 44px;position:relative;z-index:2}
+.deco{opacity:.14;z-index:0}
+
+/* ============ 卡片 ============ */
+.card{background:var(--n0);border:2px solid var(--n900);padding:28px;box-shadow:6px 6px 0 var(--n900);transition:transform .18s,box-shadow .18s;position:relative;z-index:2}
+.card.hoverable:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--n900)}
+.card h3{font-size:19px;margin-bottom:8px}
+.card p{font-size:15px;color:var(--n600)}
+.card-icon{width:42px;height:42px;margin-bottom:16px;position:relative}
+.ci-sq{background:var(--b600);transform:rotate(-8deg)}
+.ci-ci{background:var(--r500);border-radius:50%}
+.ci-tri{background:var(--y500);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px}
+.rel-note{margin-top:36px;display:flex;align-items:center;gap:14px;font-size:15px;color:var(--n600);position:relative;z-index:2;flex-wrap:wrap}
+.rel-note .formula{font-family:var(--mono);font-weight:700;color:var(--n900);background:var(--n0);border:2px solid var(--n900);padding:8px 16px;box-shadow:4px 4px 0 var(--n900);white-space:nowrap}
+.rel-note .formula b{color:var(--b600)} .rel-note .formula em{font-style:normal;color:var(--r500)} .rel-note .formula i{font-style:normal;color:var(--y700)}
+
+/* ============ 编译流水线 ============ */
+.pipeline-wrap{overflow-x:auto;margin-top:40px;position:relative;z-index:2;padding-bottom:8px}
+.pipeline{display:flex;align-items:center;min-width:680px}
+.pipe-node{border:2px solid var(--n900);background:var(--n0);padding:14px 20px;box-shadow:5px 5px 0 var(--n900);text-align:center;flex:none}
+.pipe-node .p-icon{width:30px;height:30px;margin:0 auto 8px}
+.pi-file{background:var(--b600);clip-path:polygon(0 0,72% 0,100% 28%,100% 100%,0 100%)}
+.pi-gear{background:var(--r500);border-radius:50%}
+.pi-exe{background:var(--y500)}
+.pi-out{background:var(--n900);clip-path:polygon(0 0,100% 0,100% 72%,0 72%)}
+.pi-out::after{content:"";position:absolute;left:28%;bottom:0;width:44%;height:16%;background:var(--n900)}
+.pipe-node .p-label{font-family:var(--mono);font-weight:700;font-size:13.5px}
+.pipe-node small{display:block;font-size:12px;color:var(--n500)}
+.pipe-link{flex:1;height:2px;margin:0 14px;position:relative;min-width:44px;background:repeating-linear-gradient(90deg,var(--b600) 0 10px,transparent 10px 20px)}
+.pipe-link::after{content:"";position:absolute;top:-5px;left:0;width:12px;height:12px;border-radius:50%;background:var(--r500);border:2px solid var(--n900);animation:travel 2.2s linear infinite}
+.pipe-link:nth-of-type(2)::after{animation-delay:.7s;background:var(--y500)}
+.pipe-link:nth-of-type(3)::after{animation-delay:1.4s;background:var(--b500)}
+
+/* ============ 步骤时间线 ============ */
+.split{display:grid;grid-template-columns:1fr 320px;gap:36px;align-items:start;position:relative;z-index:2}
+.steps{list-style:none;position:relative}
+.steps::before{content:"";position:absolute;left:27px;top:30px;bottom:30px;width:2px;background:var(--n200)}
+.step{display:grid;grid-template-columns:56px 1fr;gap:20px;padding:12px 0;position:relative}
+.step-num{width:48px;height:48px;display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:18px;border:2px solid var(--n900);box-shadow:4px 4px 0 var(--n900);background:var(--n0);position:relative;z-index:1}
+.step:nth-child(3n+1) .step-num{background:var(--b600);color:#fff}
+.step:nth-child(3n+2) .step-num{background:var(--r500);color:#fff}
+.step:nth-child(3n) .step-num{background:var(--y500)}
+.step-card{background:var(--n0);border:2px solid var(--n900);padding:20px 24px;box-shadow:5px 5px 0 var(--n900)}
+.step-card h3{font-size:17px;margin-bottom:6px}
+.step-card p{font-size:14.5px;color:var(--n600)}
+.step-card .code{margin-top:14px}
+.step-card ol{padding-left:20px;font-size:14.5px;color:var(--n600);margin-top:8px}
+.step-card ol li{margin-bottom:5px}
+code.inline{font-family:var(--mono);font-size:.88em;background:var(--b50);border:1px solid var(--b200);color:var(--b700);padding:1px 7px;border-radius:4px;white-space:nowrap}
+.aside-stack{display:grid;gap:24px}
+.aside-card{border:2px solid var(--n900);padding:24px;box-shadow:5px 5px 0 var(--n900);background:var(--n0)}
+.aside-card.tint-y{background:var(--y100)}
+.aside-card.tint-b{background:var(--b50)}
+.aside-card h3{font-size:16px;margin-bottom:12px;display:flex;align-items:center;gap:9px}
+.aside-card h3::before{content:"";width:11px;height:11px;background:var(--n900);flex:none}
+.aside-card.tint-y h3::before{background:var(--y700)}
+.aside-card.tint-b h3::before{background:var(--b600)}
+.aside-card ul{list-style:none}
+.aside-card li{font-size:14px;color:var(--n600);padding:7px 0 7px 22px;position:relative;border-bottom:1px dashed var(--n200)}
+.aside-card li:last-child{border-bottom:none}
+.aside-card li::before{content:"";position:absolute;left:2px;top:15px;width:8px;height:8px;background:var(--b500)}
+.aside-card li:nth-child(2)::before{background:var(--r500);border-radius:50%}
+.aside-card li:nth-child(3)::before{background:var(--y500);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.aside-card p{font-size:14px;color:var(--n600)}
+
+/* ============ 代码块 ============ */
+.code{background:var(--n900);border:2px solid var(--n900);box-shadow:6px 6px 0 var(--n300);position:relative;z-index:2}
+.code-bar{display:flex;align-items:center;gap:7px;padding:9px 14px;background:var(--n800);border-bottom:2px solid var(--n700)}
+.code-lang{font-family:var(--mono);font-size:11px;color:var(--n400);margin-left:8px;letter-spacing:.1em}
+.copy{margin-left:auto;font-family:var(--mono);font-size:11.5px;background:var(--n700);color:var(--n100);border:1px solid var(--n600);padding:3px 12px;cursor:pointer;transition:background .2s}
+.copy:hover{background:var(--b600);border-color:var(--b600)}
+.copy.ok{background:var(--b600);border-color:var(--b600);color:#fff}
+.code pre{padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.9;color:var(--n100)}
+.code pre::-webkit-scrollbar{height:8px}
+.code pre::-webkit-scrollbar-thumb{background:var(--n600)}
+.c-cmd{color:var(--b300)} .c-str{color:var(--y300)} .c-com{color:var(--n500)} .c-out{color:var(--n400)} .c-flag{color:var(--r300)}
+.c-pre{color:var(--r300)} .c-kw{color:var(--b300)} .c-fn{color:var(--y300)}
+
+/* ============ 提示条 ============ */
+.note{border:2px solid var(--n900);border-left-width:8px;padding:16px 20px;font-size:14.5px;margin-top:24px;position:relative;z-index:2;background:var(--b50);border-left-color:var(--b600);color:var(--n600)}
+.note b{color:var(--n900)}
+.note.tip{background:var(--y100);border-left-color:var(--y500)}
+.note.warn{background:var(--r100);border-left-color:var(--r500)}
+
+/* ============ 表格 ============ */
+.table-wrap{overflow-x:auto;border:2px solid var(--n900);box-shadow:6px 6px 0 var(--n900);background:var(--n0);position:relative;z-index:2}
+table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:520px}
+th{background:var(--n900);color:var(--n50);text-align:left;padding:12px 18px;font-size:13.5px;letter-spacing:.05em}
+td{padding:12px 18px;border-bottom:1px solid var(--n200);color:var(--n600);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:background .15s}
+tbody tr:hover{background:var(--b50)}
+td:first-child{font-weight:700;color:var(--n900);white-space:nowrap}
+
+/* ============ 下载横幅 & 链接卡 ============ */
+.dl-banner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;background:var(--b600);color:#fff;border:2px solid var(--n900);box-shadow:7px 7px 0 var(--n900);padding:28px 32px;margin-bottom:40px;position:relative;z-index:2;overflow:hidden}
+.dl-banner h3{font-size:21px;margin-bottom:6px}
+.dl-banner p{font-size:14.5px;color:var(--b100)}
+.dl-banner .btn{background:var(--y500);color:var(--n900);position:relative;z-index:2}
+.dl-banner .shape{opacity:.2}
+.dl-c{width:120px;height:120px;border:14px solid #fff;border-radius:50%;right:-30px;top:-40px}
+.dl-t{width:70px;height:62px;background:var(--r500);right:130px;bottom:-18px;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.link-cards{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:28px;position:relative;z-index:2}
+.link-card{display:block;background:var(--n0);border:2px solid var(--n900);padding:22px 26px;box-shadow:6px 6px 0 var(--n900);text-decoration:none;color:var(--n900);transition:transform .18s,box-shadow .18s;position:relative}
+.link-card:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--n900)}
+.link-card h4{font-size:16.5px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.link-card h4 .arr{font-family:var(--mono);color:var(--b600);font-size:19px}
+.link-card p{font-size:13.5px;color:var(--n600)}
+.link-card .tag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;background:var(--y500);border:2px solid var(--n900);padding:1px 8px;margin-bottom:10px}
+.link-card .tag.blue{background:var(--b100)}
+.subhead{font-size:16px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.subhead::before{content:"";width:12px;height:12px;background:var(--r500);flex:none}
+.subhead.sb::before{background:var(--b600)}
+.subhead.sy::before{background:var(--y500)}
+
+/* ============ 选项卡 ============ */
+.tabs-card{border:2px solid var(--n900);background:var(--n0);box-shadow:6px 6px 0 var(--n900);position:relative;z-index:2}
+.tabs{display:flex;border-bottom:2px solid var(--n900)}
+.tab-btn{flex:1;font-family:var(--mono);font-size:14px;font-weight:700;padding:14px;background:var(--n100);border:none;border-right:2px solid var(--n900);cursor:pointer;color:var(--n600);transition:background .2s,color .2s}
+.tab-btn:last-child{border-right:none}
+.tab-btn:hover{background:var(--b100)}
+.tab-btn.active{background:var(--b600);color:#fff}
+.tab-panel{display:none;padding:26px 28px}
+.tab-panel.active{display:block;animation:fadeUp .35s ease}
+.tab-panel p{font-size:14.5px;color:var(--n600);margin-bottom:14px}
+.tab-panel .code{box-shadow:4px 4px 0 var(--n300);margin-top:14px}
+.tab-panel .note{margin-top:18px}
+.tab-panel ol{padding-left:22px;font-size:14.5px;color:var(--n600)}
+.tab-panel ol li{margin-bottom:8px}
+
+/* ============ 双栏 ============ */
+.config-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:start;position:relative;z-index:2}
+
+/* ============ 验收状态横幅 ============ */
+.status-banner{display:flex;align-items:center;gap:16px;background:var(--y100);border:2px solid var(--n900);box-shadow:7px 7px 0 var(--n900);padding:22px 28px;margin-top:40px;position:relative;z-index:2;flex-wrap:wrap}
+.status-badge{width:40px;height:40px;flex:none;background:var(--b600);border:2px solid var(--n900);display:grid;place-items:center;transform:rotate(-4deg)}
+.status-badge::after{content:"";width:18px;height:10px;border-left:4px solid #fff;border-bottom:4px solid #fff;transform:rotate(-45deg);margin-top:-4px}
+.status-banner b{font-size:16.5px}
+.status-banner span{font-size:14px;color:var(--n600)}
+
+/* ============ 自查清单 ============ */
+.check-card{max-width:760px;margin:0 auto;background:var(--n0);border:2px solid var(--n900);box-shadow:8px 8px 0 var(--n900);padding:32px 36px;position:relative;z-index:2}
+.check-top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:10px}
+.check-count{font-family:var(--mono);font-weight:700;font-size:15px;color:var(--b700);white-space:nowrap}
+.check-bar{height:16px;border:2px solid var(--n900);background:var(--n100);margin-bottom:22px;overflow:hidden}
+.check-fill{height:100%;width:0;background:repeating-linear-gradient(-45deg,var(--b600) 0 12px,var(--b500) 12px 24px);transition:width .5s cubic-bezier(.22,1,.36,1)}
+.check-item{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px dashed var(--n200);cursor:pointer;user-select:none}
+.check-item:last-of-type{border-bottom:none}
+.check-item input{position:absolute;opacity:0;pointer-events:none}
+.box{width:26px;height:26px;flex:none;border:2px solid var(--n900);background:var(--n0);display:grid;place-items:center;transition:background .2s,transform .2s}
+.box::after{content:"";width:13px;height:7px;border-left:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(-45deg) scale(0);transition:transform .25s cubic-bezier(.34,1.56,.64,1);margin-top:-2px}
+.check-item input:checked+.box{background:var(--b600);transform:rotate(-4deg)}
+.check-item input:checked+.box::after{transform:rotate(-45deg) scale(1)}
+.check-item .txt{font-size:15px;transition:color .2s}
+.check-item input:checked~.txt{color:var(--n400);text-decoration:line-through}
+.check-item:hover .box{box-shadow:3px 3px 0 var(--n900)}
+.done{display:none;margin-top:22px;border:2px solid var(--n900);background:var(--y100);padding:16px 20px;font-weight:700;font-size:15px;text-align:center}
+.done.show{display:block;animation:pop .45s cubic-bezier(.34,1.56,.64,1)}
+.done span{font-family:var(--mono);color:var(--b700)}
+
+/* ============ 页脚 · 色阶展示 ============ */
+footer{background:var(--n900);color:var(--n300);padding:64px 0 36px;border-top:2px solid var(--n900);position:relative;overflow:hidden}
+footer .container{position:relative;z-index:2}
+.palette-title{font-family:var(--mono);font-size:12px;letter-spacing:.26em;color:var(--n400);text-transform:uppercase;margin-bottom:22px}
+.pal-row{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.pal-label{font-family:var(--mono);font-size:11.5px;color:var(--n400);width:86px;flex:none}
+.swatches{display:flex;gap:5px;flex:1;flex-wrap:wrap}
+.swatch{flex:1;min-width:34px;height:42px;border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;font-family:var(--mono);font-size:9.5px;transition:transform .2s}
+.swatch:hover{transform:translateY(-5px)}
+.swatch.lt{color:rgba(23,22,20,.55)} .swatch.dk{color:rgba(255,255,255,.65)}
+.pal-note{font-size:13px;color:var(--n400);margin:22px 0 34px;max-width:56em}
+.foot-bar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-top:1px solid var(--n700);padding-top:24px;font-size:13.5px}
+.foot-bar .f-logo{display:flex;align-items:center;gap:9px;font-weight:700;color:var(--n100)}
+.foot-bar a{color:var(--b300);text-decoration:none}
+.foot-bar a:hover{color:var(--y300)}
+.ft-shape{opacity:.1;z-index:1}
+.ft-c{width:200px;height:200px;border:22px solid var(--b500);border-radius:50%;right:-60px;top:-60px}
+.ft-t{width:110px;height:96px;background:var(--y500);left:-30px;bottom:-24px;clip-path:polygon(50% 0,100% 100%,0 100%)}
+
+/* ============ 回到顶部 ============ */
+#toTop{position:fixed;right:24px;bottom:24px;width:48px;height:48px;background:var(--b600);color:#fff;font-size:20px;border:2px solid var(--n900);box-shadow:4px 4px 0 var(--n900);cursor:pointer;z-index:80;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .3s,transform .3s}
+#toTop.show{opacity:1;pointer-events:auto;transform:none}
+#toTop:hover{background:var(--b700)}
+
+/* ============ 滚动显现 ============ */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease var(--d,0s),transform .7s cubic-bezier(.22,1,.36,1) var(--d,0s)}
+.reveal.in{opacity:1;transform:none}
+
+/* ============ 响应式 ============ */
+@media (max-width:960px){
+  .hero-grid{grid-template-columns:1fr;gap:44px}
+  .hero-art{height:420px;max-width:560px}
+  .split,.config-grid,.link-cards{grid-template-columns:1fr}
+  .nav-inner{height:auto;padding:10px 0;flex-wrap:wrap}
+  .block{padding:72px 0}
+}
+@media (max-width:640px){
+  .sec-index{width:52px;height:52px;font-size:19px}
+  .sec-head{gap:16px;margin-bottom:36px}
+  .step{grid-template-columns:46px 1fr;gap:14px}
+  .step-num{width:40px;height:40px;font-size:15px}
+  .steps::before{left:22px}
+  .code pre{font-size:12.5px}
+  .check-card{padding:24px 20px}
+  .hero{padding:64px 0 72px}
+  .hero-art{height:380px}
+  .term-card{top:70px}
+  .tab-btn{font-size:12px;padding:12px 6px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+}
+/* ============ 培训套件 · 返回主页 ============ */
+.home-link{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12.5px;font-weight:700;letter-spacing:.08em;text-decoration:none;color:var(--n900);border:2px solid var(--n900);background:var(--n0);padding:6px 13px;box-shadow:3px 3px 0 var(--n900);white-space:nowrap;transition:background .2s,color .2s}
+.home-link:hover{background:var(--b600);color:var(--n0)}
+.home-link::before{content:"";width:12px;height:12px;flex:none;background:var(--b600)}
+.home-link:hover::before{background:var(--n0)}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="logo" href="#top">
+      <span class="logo-mark"><i></i><i></i><i></i></span>
+      C×VSCode <small>BLUEPRINT EDITION</small>
+    </a>
+    <a class="home-link" href="index.html">培训主页</a>
+    <nav class="nav-links">
+      <a href="#intro">前导</a>
+      <a href="#compiler">编译器</a>
+      <a href="#vscode">VSCode</a>
+      <a href="#env">环境配置</a>
+      <a href="#hello">验收</a>
+      <a href="#extras">可选扩展</a>
+      <a href="#checklist">自查清单</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="kicker">C Language · Env Setup</p>
+        <h1>C 语言 <em>×</em> VSCode<br><span class="hl">环境搭建</span></h1>
+        <p class="lead">选定编译器，装好 VSCode 并汉化，配置 MinGW 与 C/C++ 插件 —— 跑通第一个 Hello 程序，正式开启 C 语言学习。</p>
+        <div class="chips">
+          <span class="chip c-b">零基础友好</span>
+          <span class="chip">Windows 10 / 11</span>
+          <span class="chip c-y">约 40 分钟</span>
+          <span class="chip c-r">配套 Git 教程</span>
+        </div>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#intro">开始阅读 ↓</a>
+          <a class="btn btn-ghost" href="#checklist">直达自查清单</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="shape sh-donut ha-donut anim-spin-rev"></div>
+        <div class="shape sh-tri ha-tri anim-float"></div>
+        <div class="shape sh-half ha-half anim-float2"></div>
+        <div class="shape sh-sq ha-sq anim-float2"></div>
+        <div class="shape ha-plus anim-spin"></div>
+        <div class="shape ha-dots"></div>
+        <div class="term-card">
+          <div class="term-bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot b"></span>
+            <span class="term-title">终端 — 环境搭建完成后的样子</span>
+          </div>
+          <div class="term-body" id="termBody"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 跑马灯 ================= -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>#INCLUDE &lt;STDIO.H&gt; <b>◆</b> INT MAIN(VOID) <b>◆</b> PRINTF <b>◆</b> RETURN 0 <b>◆</b> GCC <b>◆</b> HELLO.EXE <b>◆</b>&nbsp;</span>
+      <span>#INCLUDE &lt;STDIO.H&gt; <b>◆</b> INT MAIN(VOID) <b>◆</b> PRINTF <b>◆</b> RETURN 0 <b>◆</b> GCC <b>◆</b> HELLO.EXE <b>◆</b>&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- ================= 00 前导 ================= -->
+  <section class="block" id="intro">
+    <div class="shape sh-circle deco" style="width:180px;height:180px;background:var(--b300);right:-60px;top:40px"></div>
+    <div class="container">
+      <div class="sec-head reveal">
+        <div class="sec-index">00</div>
+        <div><p class="sec-kicker">Before You Code</p><h2>前导：写代码需要哪些工具</h2></div>
+      </div>
+      <p class="sec-desc reveal">C 语言是<b>嵌入式开发的母语</b>：STM32、RTOS、Linux 内核都以 C 为主。动手之前，先分清三类工具 —— 这是新手最容易混淆的概念。</p>
+      <div class="grid-3">
+        <div class="card hoverable reveal" style="--d:.05s">
+          <div class="card-icon ci-sq"></div>
+          <h3>编辑器 · 稿纸</h3>
+          <p>写代码的地方，本质是「高级记事本」。<b>VSCode 本身不会编译代码</b>，它只负责写和展示。</p>
+        </div>
+        <div class="card hoverable reveal" style="--d:.15s">
+          <div class="card-icon ci-ci"></div>
+          <h3>编译器 · 翻译官</h3>
+          <p>把 <code class="inline">.c</code> 源文件翻译成电脑能执行的 <code class="inline">.exe</code>。真正干活的是它 —— 本教程选 <b>GCC（MinGW-w64）</b>。</p>
+        </div>
+        <div class="card hoverable reveal" style="--d:.25s">
+          <div class="card-icon ci-tri"></div>
+          <h3>IDE · 精装工作室</h3>
+          <p>编辑器 + 编译器 + 调试器的全家桶。我们用 <b>VSCode + 插件 + MinGW</b> 自行组装一套轻量 IDE。</p>
+        </div>
+      </div>
+
+      <div class="pipeline-wrap reveal" style="--d:.3s">
+        <div class="pipeline">
+          <div class="pipe-node">
+            <div class="p-icon pi-file"></div>
+            <div class="p-label">hello.c</div>
+            <small>源代码</small>
+          </div>
+          <div class="pipe-link"></div>
+          <div class="pipe-node">
+            <div class="p-icon pi-gear"></div>
+            <div class="p-label">gcc 编译</div>
+            <small>翻译</small>
+          </div>
+          <div class="pipe-link"></div>
+          <div class="pipe-node">
+            <div class="p-icon pi-exe"></div>
+            <div class="p-label">hello.exe</div>
+            <small>可执行文件</small>
+          </div>
+          <div class="pipe-link"></div>
+          <div class="pipe-node">
+            <div class="p-icon pi-out" style="position:relative"></div>
+            <div class="p-label">终端输出</div>
+            <small>运行结果</small>
+          </div>
+        </div>
+      </div>
+      <div class="rel-note reveal" style="--d:.35s">
+        <span class="formula"><b>编辑器</b> 写代码 · <em>编译器</em> 做翻译 · <i>终端</i> 看结果</span>
+        <span>「装 VSCode」和「装编译器」是两步，缺一不可。</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 01 编译器 ================= -->
+  <section class="block alt" id="compiler">
+    <div class="shape sh-tri deco" style="width:150px;height:132px;background:var(--y500);right:40px;top:60px"></div>
+    <div class="container">
+      <div class="sec-head reveal">
+        <div class="sec-index">01</div>
+        <div><p class="sec-kicker">Compiler</p><h2>编译器选择</h2></div>
+      </div>
+      <div class="table-wrap reveal">
+        <table>
+          <thead><tr><th>编译器</th><th>平台</th><th>特点</th><th>适合谁</th></tr></thead>
+          <tbody>
+            <tr><td>GCC（MinGW-w64）✅</td><td>Windows / Linux</td><td>开源免费、轻量解压即用，教学与嵌入式主流</td><td>本教程选择，初学者首选</td></tr>
+            <tr><td>MSVC</td><td>Windows</td><td>微软官方，随 Visual Studio 安装，体积几个 G</td><td>Windows 桌面软件开发</td></tr>
+            <tr><td>Clang（LLVM）</td><td>全平台</td><td>报错信息友好，macOS 默认</td><td>进阶可选</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note reveal"><b>为什么选 MinGW-w64</b>：它是 GCC 的 Windows 移植版。后续 STM32 使用的 <code class="inline">arm-none-eabi-gcc</code> 与它同属 GCC 家族，命令习惯一脉相承；免费开源、解压即用、不写注册表。</div>
+
+      <div class="link-cards">
+        <a class="link-card reveal" style="--d:.08s" href="https://winlibs.com/" target="_blank" rel="noopener">
+          <span class="tag">推荐</span>
+          <h4>WinLibs 下载站 <span class="arr">↗</span></h4>
+          <p>winlibs.com · 免安装压缩包，内含 GCC / GDB / Make 全套，页面往下翻找 <b>Zip archive</b></p>
+        </a>
+        <a class="link-card reveal" style="--d:.16s" href="https://github.com/niXman/mingw-builds-binaries/releases" target="_blank" rel="noopener">
+          <span class="tag blue">备选</span>
+          <h4>GitHub 发布页 <span class="arr">↗</span></h4>
+          <p>niXman/mingw-builds-binaries · 版本最新，协会学长常备；另可参考 mingw-w64.org 官方说明</p>
+        </a>
+      </div>
+
+      <p class="subhead sy reveal" style="margin-top:36px">版本怎么选（Windows 10 / 11 · 64 位）</p>
+      <div class="chips reveal" style="margin-bottom:18px">
+        <span class="chip c-b">x86_64</span>
+        <span class="chip">posix</span>
+        <span class="chip c-r">seh</span>
+        <span class="chip c-y">ucrt</span>
+      </div>
+      <div class="code reveal">
+        <div class="code-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot b"></span><span class="code-lang">文件名示例</span></div>
+        <pre><code>x86_64-16.2.0-release-posix-seh-ucrt-rt_v14-rev1.7z</code></pre>
+      </div>
+      <div class="note tip reveal">32 位老电脑选 <code class="inline">i686</code> 开头；Windows 7 等老系统选 <code class="inline">msvcrt</code> 结尾。<b>.zip</b> 包 Windows 直接解压；<b>.7z</b> 包需要 7-Zip 或 Bandizip。</div>
+    </div>
+  </section>
+
+  <!-- ================= 02 VSCode ================= -->
+  <section class="block" id="vscode">
+    <div class="shape sh-donut deco" style="width:170px;height:170px;border:20px solid var(--r300);left:-70px;bottom:60px"></div>
+    <div class="container">
+      <div class="sec-head reveal">
+        <div class="sec-index">02</div>
+        <div><p class="sec-kicker">VSCode Setup</p><h2>VSCode 下载与基础配置</h2></div>
+      </div>
+
+      <div class="dl-banner reveal">
+        <div class="shape dl-c"></div>
+        <div class="shape dl-t"></div>
+        <div>
+          <h3>Visual Studio Code</h3>
+          <p>code.visualstudio.com · 点击 Download for Windows</p>
+        </div>
+        <a class="btn" href="https://code.visualstudio.com/" target="_blank" rel="noopener">打开官网 ↗</a>
+      </div>
+
+      <div class="split">
+        <ol class="steps">
+          <li class="step reveal"><div class="step-num">1</div><div class="step-card">
+            <h3>官网下载</h3>
+            <p>打开 <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">code.visualstudio.com</a>，点击 <b>Download for Windows</b>（或直接访问 /Download 页面）。</p>
+          </div></li>
+          <li class="step reveal" style="--d:.08s"><div class="step-num">2</div><div class="step-card">
+            <h3>运行安装程序</h3>
+            <p>建议勾选 <b>「添加到 PATH」</b> 和 <b>「通过 Code 打开」右键菜单</b>，其余保持默认，一路下一步。</p>
+          </div></li>
+          <li class="step reveal" style="--d:.12s"><div class="step-num">3</div><div class="step-card">
+            <h3>安装中文汉化插件</h3>
+            <p>点击左侧活动栏<b>「四个小方块」图标</b>（扩展，或 <code class="inline">Ctrl+Shift+X</code>），搜索 <code class="inline">Chinese</code>，安装：</p>
+            <p style="margin-top:8px"><b>Chinese (Simplified) (简体中文) Language Pack for Visual Studio Code</b></p>
+            <div class="note warn" style="margin-top:12px">认准发布者 <b>Microsoft</b>（ID：<code class="inline">ms-ceintl.vscode-language-pack-zh-hans</code>），不要装第三方仿冒汉化包。</div>
+          </div></li>
+          <li class="step reveal" style="--d:.16s"><div class="step-num">4</div><div class="step-card">
+            <h3>右下角重启</h3>
+            <p>安装完成后右下角弹出提示，点击 <b>「Change Language and Restart」</b>。重启后界面全中文，<b>基础配置部分结束</b>。</p>
+          </div></li>
+        </ol>
+        <aside class="aside-stack">
+          <div class="aside-card tint-y reveal" style="--d:.1s">
+            <h3>网络问题下载不了？</h3>
+            <p>直接<b>问学长要安装包</b> —— 协会群文件里一般有备用，离线安装效果完全相同。</p>
+          </div>
+          <div class="aside-card tint-b reveal" style="--d:.2s">
+            <h3>汉化兜底方案</h3>
+            <ul>
+              <li>右下角没弹窗？按 <code class="inline">Ctrl+Shift+P</code> 打开命令面板</li>
+              <li>输入 <code class="inline">Configure Display Language</code>，选择 <code class="inline">zh-cn</code></li>
+              <li>手动重启 VSCode 即可</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 03 环境配置 ================= -->
+  <section class="block alt" id="env">
+    <div class="shape sh-sq deco" style="width:130px;height:130px;background:var(--b300);right:60px;bottom:70px"></div>
+    <div class="container">
+      <div class="sec-head reveal">
+        <div class="sec-index">03</div>
+        <div><p class="sec-kicker">C/C++ Environment</p><h2>VSCode C/C++ 环境配置</h2></div>
+      </div>
+      <ol class="steps">
+        <li class="step reveal"><div class="step-num">1</div><div class="step-card">
+          <h3>解压 MinGW 到 VSCode 目录</h3>
+          <p>下载对应你电脑版本的压缩包，<b>解压到 VSCode 安装目录下</b>，得到 <code class="inline">mingw64</code> 文件夹：</p>
+          <div class="code">
+            <div class="code-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot b"></span><span class="code-lang">目录结构示例</span></div>
+            <pre><code>D:\Microsoft VS Code\
+├── Code.exe
+└── mingw64\          <span class="c-com">← 解压出来的编译器</span>
+    ├── bin\          <span class="c-com">← 关键目录，里面有 gcc.exe</span>
+    ├── include\
+    └── lib\</code></pre>
+          </div>
+          <p style="margin-top:12px">打开 <code class="inline">mingw64\bin</code> 确认有 <code class="inline">gcc.exe</code>、<code class="inline">gdb.exe</code>，然后<b>复制 bin 的完整路径</b>（如 <code class="inline">D:\Microsoft VS Code\mingw64\bin</code>）。路径不要有中文。</p>
+        </div></li>
+        <li class="step reveal" style="--d:.08s"><div class="step-num">2</div><div class="step-card">
+          <h3>把 bin 路径配置到系统环境变量</h3>
+          <ol>
+            <li><code class="inline">Win</code> 键搜索「<b>编辑系统环境变量</b>」并打开，点击「<b>环境变量</b>」</li>
+            <li>在「<b>系统变量</b>」区域找到并双击 <code class="inline">Path</code></li>
+            <li>点击「<b>新建</b>」，粘贴 bin 路径，一路「<b>确定</b>」保存</li>
+          </ol>
+          <div class="code">
+            <div class="code-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot b"></span><span class="code-lang">BASH · 新开终端验证</span><button class="copy" type="button">复制</button></div>
+            <pre><code><span class="cp"><span class="c-cmd">gcc</span> <span class="c-flag">--version</span></span>
+<span class="cp"><span class="c-cmd">gdb</span> <span class="c-flag">--version</span></span>
+<span class="c-out">两条都输出版本号 = 配置成功</span></code></pre>
+          </div>
+          <div class="note warn" style="margin-top:16px"><b>必须是新开的终端</b>才能读到新的 Path；已打开的终端 / VSCode 请关掉重开。</div>
+        </div></li>
+        <li class="step reveal" style="--d:.12s"><div class="step-num">3</div><div class="step-card">
+          <h3>安装 C/C++ 插件</h3>
+          <p>回到扩展页（四个小方块），搜索 <code class="inline">C/C++</code>，安装 <b>Microsoft 发布的 C/C++</b>（代码补全、错误提示、调试与运行按钮）。也可装 <b>C/C++ Extension Pack</b> 全家桶，学习阶段基础版即可。</p>
+          <p style="margin-top:8px">（可选）安装 <b>Code Runner</b>，获得更简单的「一键运行」体验。<b>环境配置部分结束。</b></p>
+        </div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= 04 验收 ================= -->
+  <section class="block" id="hello">
+    <div class="shape sh-half deco" style="width:160px;height:80px;background:var(--y500);left:44%;top:30px"></div>
+    <div class="container">
+      <div class="sec-head reveal">
+        <div class="sec-index">04</div>
+        <div><p class="sec-kicker">Hello World</p><h2>第一个程序：Hello VSCode</h2></div>
+      </div>
+      <div class="config-grid">
+        <ol class="steps">
+          <li class="step reveal"><div class="step-num">1</div><div class="step-card">
+            <h3>新建文件夹并打开</h3>
+            <p>桌面新建文件夹（如 <code class="inline">c-study</code>），<b>右键 →「通过 Code 打开」</b>。</p>
+          </div></li>
+          <li class="step reveal" style="--d:.08s"><div class="step-num">2</div><div class="step-card">
+            <h3>新建 hello.c</h3>
+            <p>在左侧资源管理器新建文件 <code class="inline">hello.c</code>，编写右侧的基础程序并保存。</p>
+          </div></li>
+          <li class="step reveal" style="--d:.12s"><div class="step-num">3</div><div class="step-card">
+            <h3>点击运行</h3>
+            <p>点编辑器<b>右上角 ▶ 运行按钮</b>。首次运行若提示选择环境：选 <b>C++ (GDB/LLDB)</b> → <b>gcc.exe 生成和调试活动文件</b>。</p>
+          </div></li>
+          <li class="step reveal" style="--d:.16s"><div class="step-num">4</div><div class="step-card">
+            <h3>查看输出</h3>
+            <p>终端正确输出 <code class="inline">Hello, VSCode!</code>，<b>基础环境配置完毕</b>。也可手动编译，效果相同：</p>
+            <div class="code">
+              <div class="code-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot b"></span><span class="code-lang">BASH</span><button class="copy" type="button">复制</button></div>
+              <pre><code><span class="cp"><span class="c-cmd">gcc</span> hello.c <span class="c-flag">-o</span> hello</span>
+<span class="cp">.\hello.exe</span></code></pre>
+            </div>
+          </div></li>
+        </ol>
+        <div class="reveal" style="--d:.1s">
+          <div class="code">
+            <div class="code-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot b"></span><span class="code-lang">hello.c</span><button class="copy" type="button">复制</button></div>
+            <pre><code><span class="cp"><span class="c-pre">#include</span> <span class="c-str">&lt;stdio.h&gt;</span>
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>(<span class="c-kw">void</span>)
+{
+    <span class="c-fn">printf</span>(<span class="c-str">"Hello, VSCode!\n"</span>);
+    <span class="c-kw">return</span> 0;
+}</span></code></pre>
+          </div>
+          <div class="code" style="margin-top:24px;box-shadow:6px 6px 0 var(--b200)">
+            <div class="code-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot b"></span><span class="code-lang">终端 · 预期输出</span></div>
+            <pre><code><span class="c-out">Hello, VSCode!</span></code></pre>
+          </div>
+        </div>
+      </div>
+      <div class="status-banner reveal">
+        <div class="status-badge"></div>
+        <div>
+          <b>看到输出，基础环境配置完毕！</b><br>
+          <span>当前状态：VSCode 已汉化 · C 语言可编译输出</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 05 可选扩展 ================= -->
+  <section class="block alt" id="extras">
+    <div class="shape sh-circle deco" style="width:150px;height:150px;background:var(--r300);left:-50px;top:80px"></div>
+    <div class="container">
+      <div class="sec-head reveal">
+        <div class="sec-index">05</div>
+        <div><p class="sec-kicker">Optional</p><h2>可选扩展内容</h2></div>
+      </div>
+      <p class="sec-desc reveal">以下三项不影响基础环境，按需选做。</p>
+      <div class="tabs-card reveal">
+        <div class="tabs" role="tablist">
+          <button class="tab-btn active" type="button" data-tab="tab-gbk">中文乱码</button>
+          <button class="tab-btn" type="button" data-tab="tab-theme">界面美化</button>
+          <button class="tab-btn" type="button" data-tab="tab-github">绑定 GITHUB</button>
+        </div>
+
+        <div class="tab-panel active" id="tab-gbk">
+          <p><b>现象</b>：<code class="inline">printf("你好");</code> 输出变成乱码。<b>原因</b>：源文件是 UTF-8 编码，Windows 终端默认 GBK（代码页 936），两边编码不一致。</p>
+          <div class="code">
+            <div class="code-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot b"></span><span class="code-lang">BASH · 方案 A / B</span><button class="copy" type="button">复制</button></div>
+            <pre><code><span class="cp"><span class="c-cmd">chcp</span> 65001  <span class="c-com"># A：当前终端切 UTF-8（临时）</span></span>
+<span class="cp"><span class="c-cmd">gcc</span> hello.c <span class="c-flag">-o</span> hello <span class="c-flag">-fexec-charset=GBK</span>  <span class="c-com"># B：按 GBK 输出</span></span></code></pre>
+          </div>
+          <p style="margin-top:18px"><b>方案 C（推荐）</b>：配合 Code Runner 一劳永逸 —— 设置（<code class="inline">Ctrl+,</code>）→ 右上角「打开设置(JSON)」，加入：</p>
+          <div class="code">
+            <div class="code-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot b"></span><span class="code-lang">settings.json</span><button class="copy" type="button">复制</button></div>
+            <pre><code><span class="cp"><span class="c-str">"code-runner.executorMap"</span>: {
+    <span class="c-str">"c"</span>: <span class="c-str">"cd $dir &amp;&amp; gcc $fileName -o $fileNameWithoutExt -fexec-charset=GBK &amp;&amp; $dir$fileNameWithoutExt"</span>
+}</span></code></pre>
+          </div>
+          <div class="note warn">「系统区域设置 → Beta 版 UTF-8」会影响整个系统的老软件，<b>不建议新手使用</b>。</div>
+        </div>
+
+        <div class="tab-panel" id="tab-theme">
+          <div class="table-wrap" style="box-shadow:4px 4px 0 var(--n300)">
+            <table>
+              <thead><tr><th>项目</th><th>推荐</th><th>操作</th></tr></thead>
+              <tbody>
+                <tr><td>颜色主题</td><td>One Dark Pro / GitHub Theme</td><td>扩展页安装，Ctrl+K Ctrl+T 切换</td></tr>
+                <tr><td>文件图标</td><td>Material Icon Theme</td><td>扩展页安装，按提示启用</td></tr>
+                <tr><td>编程字体</td><td>Cascadia Code / JetBrains Mono</td><td>安装字体后在设置中指定</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="code">
+            <div class="code-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot b"></span><span class="code-lang">settings.json · 参考配置</span><button class="copy" type="button">复制</button></div>
+            <pre><code><span class="cp">{
+    <span class="c-str">"editor.fontFamily"</span>: <span class="c-str">"'Cascadia Code', Consolas, monospace"</span>,
+    <span class="c-str">"editor.fontLigatures"</span>: <span class="c-kw">true</span>,
+    <span class="c-str">"editor.fontSize"</span>: 16,
+    <span class="c-str">"editor.minimap.enabled"</span>: <span class="c-kw">false</span>,
+    <span class="c-str">"editor.bracketPairColorization.enabled"</span>: <span class="c-kw">true</span>
+}</span></code></pre>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-github">
+          <p>用上一篇教程注册的 GitHub 账号登录 VSCode，开启<b>设置同步</b>：</p>
+          <ol>
+            <li>点击 VSCode <b>左下角账户图标</b>（小人像）→「<b>登录以使用设置同步</b>」</li>
+            <li>选择 <b>GitHub</b>，浏览器跳转授权页面，点击 <b>Authorize</b></li>
+            <li>回到 VSCode，确认开启 <b>Settings Sync（设置同步）</b></li>
+          </ol>
+          <div class="note"><b>好处</b>：主题、插件、快捷键、代码片段全部云端备份，换电脑登录同一账号一键恢复；后续还能直接在 VSCode 里克隆、提交、推送 GitHub 仓库，与 Git 教程无缝衔接。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 06 清单 ================= -->
+  <section class="block" id="checklist">
+    <div class="shape sh-tri deco" style="width:140px;height:124px;background:var(--b300);right:8%;top:50px"></div>
+    <div class="container">
+      <div class="sec-head reveal" style="justify-content:center">
+        <div class="sec-index">06</div>
+        <div><p class="sec-kicker">Checklist</p><h2>完成自查清单</h2></div>
+      </div>
+      <div class="check-card reveal">
+        <div class="check-top">
+          <b>全部打勾，环境搭建即就绪</b>
+          <span class="check-count" id="checkCount">0 / 6</span>
+        </div>
+        <div class="check-bar"><div class="check-fill" id="checkFill"></div></div>
+        <label class="check-item"><input type="checkbox"><span class="box"></span><span class="txt">VSCode 安装成功（官网或学长安装包）</span></label>
+        <label class="check-item"><input type="checkbox"><span class="box"></span><span class="txt">中文汉化完成，界面全中文</span></label>
+        <label class="check-item"><input type="checkbox"><span class="box"></span><span class="txt">MinGW 已解压到 VSCode 目录，bin 已加入 Path</span></label>
+        <label class="check-item"><input type="checkbox"><span class="box"></span><span class="txt">新终端中 <code class="inline">gcc --version</code> 正常输出版本号</span></label>
+        <label class="check-item"><input type="checkbox"><span class="box"></span><span class="txt">C/C++ 插件已安装</span></label>
+        <label class="check-item"><input type="checkbox"><span class="box"></span><span class="txt"><code class="inline">hello.c</code> 点击运行，输出 Hello, VSCode!</span></label>
+        <div class="done" id="checkDone">环境就绪！正式开启 C 语言学习 <span>→ 变量 / 分支 / 循环 / 函数 / 指针</span></div>
+      </div>
+      <div class="note reveal" style="max-width:760px;margin:32px auto 0">
+        <b>学习路线</b>：变量与数据类型 → 运算符 → 顺序/分支/循环 → 函数 → 数组与字符串 → <b>指针</b> → 结构体 → 文件操作。每学一个知识点就改写 hello.c 动手验证；指针是 C 的灵魂，务必多写多练。
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= 页脚 · 色阶 ================= -->
+<footer>
+  <div class="shape ft-c"></div>
+  <div class="shape ft-t"></div>
+  <div class="container">
+    <p class="palette-title">Color Scale · 色阶理论配色</p>
+    <div class="pal-row">
+      <span class="pal-label">主色阶 · 蓝</span>
+      <div class="swatches">
+        <div class="swatch lt" style="background:#EEF3FF">50</div><div class="swatch lt" style="background:#DCE7FD">100</div><div class="swatch lt" style="background:#BAD0FB">200</div><div class="swatch lt" style="background:#8FAFF7">300</div><div class="swatch lt" style="background:#628CF0">400</div><div class="swatch dk" style="background:#3D6BE5">500</div><div class="swatch dk" style="background:#2653D6">600</div><div class="swatch dk" style="background:#1F43AD">700</div><div class="swatch dk" style="background:#1D398A">800</div><div class="swatch dk" style="background:#1C326E">900</div><div class="swatch dk" style="background:#131F45">950</div>
+      </div>
+    </div>
+    <div class="pal-row">
+      <span class="pal-label">中性阶 · 墨</span>
+      <div class="swatches">
+        <div class="swatch lt" style="background:#FFFFFF">0</div><div class="swatch lt" style="background:#F7F5F0">50</div><div class="swatch lt" style="background:#EFECE5">100</div><div class="swatch lt" style="background:#E0DCD2">200</div><div class="swatch lt" style="background:#C6C1B4">300</div><div class="swatch lt" style="background:#9A9488">400</div><div class="swatch dk" style="background:#6F6A5E">500</div><div class="swatch dk" style="background:#4E4A41">600</div><div class="swatch dk" style="background:#36332D">700</div><div class="swatch dk" style="background:#242220">800</div><div class="swatch dk" style="background:#171614">900</div>
+      </div>
+    </div>
+    <div class="pal-row">
+      <span class="pal-label">点缀 · 朱红</span>
+      <div class="swatches">
+        <div class="swatch lt" style="background:#FBE4DE">100</div><div class="swatch lt" style="background:#F2A08E">300</div><div class="swatch dk" style="background:#E1502F">500</div><div class="swatch dk" style="background:#B23A20">700</div>
+      </div>
+    </div>
+    <div class="pal-row">
+      <span class="pal-label">点缀 · 明黄</span>
+      <div class="swatches">
+        <div class="swatch lt" style="background:#FFF3C2">100</div><div class="swatch lt" style="background:#FFDE7A">300</div><div class="swatch lt" style="background:#F4B400">500</div><div class="swatch dk" style="background:#C08E00">700</div>
+      </div>
+    </div>
+    <p class="pal-note">配色方法：蓝色主色阶构建信息层级（900 标题 / 600 交互 / 50–100 底色），中性色阶承载纸面与终端，朱红与明黄仅用于几何点缀。圆、三角、方块与硬阴影构成几何主义视觉语言。</p>
+    <div class="foot-bar">
+      <span class="f-logo"><span class="logo-mark"><i></i><i></i><i></i></span>C 语言 × VSCode 环境搭建</span>
+      <span>培训套件 02 · 开发环境 · 配套 Markdown 见同目录同名文件</span>
+      <a href="index.html">← 返回培训主页</a>
+    </div>
+  </div>
+</footer>
+
+<button id="toTop" type="button" aria-label="回到顶部">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* 滚动进度 + 回到顶部 */
+  var bar = document.getElementById("progress");
+  var toTop = document.getElementById("toTop");
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + "%";
+    toTop.classList.toggle("show", h.scrollTop > 600);
+  }
+  window.addEventListener("scroll", onScroll, {passive:true});
+  onScroll();
+  toTop.addEventListener("click", function(){
+    window.scrollTo({top:0, behavior: reduced ? "auto" : "smooth"});
+  });
+
+  /* 滚动显现 */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); }
+    });
+  }, {threshold:.12});
+  document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+
+  /* 导航高亮 */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll(".nav-links a"));
+  var so = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        navLinks.forEach(function(a){ a.classList.toggle("active", a.hash === "#" + e.target.id); });
+      }
+    });
+  }, {rootMargin:"-35% 0px -55% 0px"});
+  navLinks.forEach(function(a){
+    var sec = document.querySelector(a.hash);
+    if(sec) so.observe(sec);
+  });
+
+  /* Hero 终端打字机 */
+  var term = document.getElementById("termBody");
+  var lines = [
+    {t:"$ gcc --version", c:"tl-cmd", speed:60},
+    {t:"gcc (MinGW-w64) 16.2.0", c:"tl-out", speed:16},
+    {t:"$ gcc hello.c -o hello", c:"tl-cmd", speed:60},
+    {t:"$ ./hello.exe", c:"tl-cmd", speed:60},
+    {t:"Hello, VSCode!", c:"tl-ok", speed:40}
+  ];
+  var cursor = document.createElement("span");
+  cursor.className = "cursor";
+  if(reduced){
+    lines.forEach(function(l){
+      var d = document.createElement("div");
+      d.className = "tl " + l.c;
+      d.textContent = l.t;
+      term.appendChild(d);
+    });
+    term.lastChild.appendChild(cursor);
+  } else {
+    var li = 0;
+    function nextLine(){
+      if(li >= lines.length) return;
+      var l = lines[li];
+      var d = document.createElement("div");
+      d.className = "tl " + l.c;
+      term.appendChild(d);
+      d.appendChild(cursor);
+      var ci = 0;
+      (function tick(){
+        if(ci < l.t.length){
+          cursor.before(document.createTextNode(l.t.charAt(ci++)));
+          setTimeout(tick, l.speed);
+        } else {
+          li++;
+          setTimeout(nextLine, 380);
+        }
+      })();
+    }
+    setTimeout(nextLine, 500);
+  }
+
+  /* 代码复制（只复制 .cp 标记的内容，不含输出展示） */
+  document.querySelectorAll(".copy").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var code = btn.closest(".code").querySelector("code");
+      var cps = code.querySelectorAll(".cp");
+      var text = cps.length
+        ? Array.prototype.map.call(cps, function(s){ return s.innerText; }).join("\n")
+        : code.innerText;
+      function feedback(){
+        btn.textContent = "已复制 ✓";
+        btn.classList.add("ok");
+        setTimeout(function(){ btn.textContent = "复制"; btn.classList.remove("ok"); }, 1600);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(feedback, function(){ fallback(); });
+      } else { fallback(); }
+      function fallback(){
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); } catch(e){}
+        ta.remove();
+        feedback();
+      }
+    });
+  });
+
+  /* 选项卡 */
+  var tabBtns = document.querySelectorAll(".tab-btn");
+  tabBtns.forEach(function(b){
+    b.addEventListener("click", function(){
+      tabBtns.forEach(function(x){ x.classList.toggle("active", x === b); });
+      document.querySelectorAll(".tab-panel").forEach(function(p){
+        p.classList.toggle("active", p.id === b.dataset.tab);
+      });
+    });
+  });
+
+  /* 自查清单 + 本地持久化 */
+  var boxes = Array.prototype.slice.call(document.querySelectorAll(".check-item input"));
+  var fill = document.getElementById("checkFill");
+  var count = document.getElementById("checkCount");
+  var done = document.getElementById("checkDone");
+  var KEY = "c-vscode-setup-checklist-v1";
+  function load(){
+    try {
+      var saved = JSON.parse(localStorage.getItem(KEY) || "[]");
+      boxes.forEach(function(b, i){ b.checked = !!saved[i]; });
+    } catch(e){}
+  }
+  function update(){
+    var n = boxes.filter(function(b){ return b.checked; }).length;
+    fill.style.width = (n / boxes.length * 100) + "%";
+    count.textContent = n + " / " + boxes.length;
+    done.classList.toggle("show", n === boxes.length);
+    try { localStorage.setItem(KEY, JSON.stringify(boxes.map(function(b){ return b.checked; }))); } catch(e){}
+  }
+  boxes.forEach(function(b){ b.addEventListener("change", update); });
+  load();
+  update();
+})();
+</script>
+</body>
+</html>

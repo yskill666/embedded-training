@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>嵌入式协会 · 新生培训套件 · 总主页</title>
+<title>机器人与人工智能创新协会 · 电控组培训 · 总主页</title>
 <style>
-/* ══════════ 苏式构成主义 · 培训套件总主页 ══════════
+/* ══════════ 苏式构成主义 · 电控组培训总主页 ══════════
    红 / 黑 / 奶油纸面 · 对角楔形 · 红星 · 数学网格 · 硬阴影
-   与三个子教程共享几何 DNA，配色各有身份：Git 苏式红黑 / VSCode 蓝 / C 瑞士红 */
+   与三个子教程共享几何 DNA，配色各有身份：Git 苏式红 / VSCode 蓝 / C 瑞士黑 */
 :root{
   --paper:#EDE4D0; --paper2:#E2D6BC; --card:#F5EFE0;
   --ink:#161210; --ink2:#4A4132; --gray:#8F8064; --hair:#D2C4A4;
@@ -155,8 +155,8 @@ footer{background:var(--ink);color:var(--paper2);padding:54px 0 36px}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
 footer h6{font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
 footer p{font-size:13.5px;color:var(--paper2);line-height:1.8}
-.swatches{display:flex;gap:6px;margin-top:14px}
-.swatches div{width:34px;height:34px;border:1px solid rgba(255,255,255,.18)}
+footer a{color:var(--gold);text-decoration:none}
+footer a:hover{color:var(--paper);text-decoration:underline}
 .foot-line{border-top:1px solid #3A372F;margin-top:40px;padding-top:20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gray)}
 
 /* 回到顶部 */
@@ -189,7 +189,7 @@ footer p{font-size:13.5px;color:var(--paper2);line-height:1.8}
 
 <header class="topbar">
   <div class="wrap">
-    <span><span class="dot"></span>嵌入式协会 · EMBEDDED CLUB</span>
+    <span><span class="dot"></span>机器人与人工智能创新协会 · 电控组</span>
     <span>TRAINING SUITE — 总入口 / HOME</span>
   </div>
 </header>
@@ -197,13 +197,13 @@ footer p{font-size:13.5px;color:var(--paper2);line-height:1.8}
 <section class="hero">
   <div class="wrap">
     <div>
-      <p class="kicker">新生培训系列 · 桌面长期维护</p>
-      <h1>嵌入式协会<br><span class="redblock">新生培训</span></h1>
+      <p class="kicker">机器人与人工智能创新协会 · 电控组培训</p>
+      <h1>电控组<br><span class="redblock">新生培训</span></h1>
       <p class="lead">从注册 GitHub、搭好 VSCode，到系统学完 C 语言，再迈向单片机。一个主页，串起整条新生成长路线 —— 点下面的卡片进入对应教程。</p>
       <div class="hero-meta">
         <span><b>03</b> 门已就绪</span>
         <span><b>01</b> 门待增补</span>
-        <span>风格 · 苏式构成主义</span>
+        <span>零基础友好</span>
       </div>
       <div class="hero-cta">
         <a class="btn btn-red" href="#suite">进入培训套件 →</a>
@@ -217,7 +217,7 @@ footer p{font-size:13.5px;color:var(--paper2);line-height:1.8}
       <div class="shape ha-bar"></div>
       <div class="shape ha-dot anim-float2"></div>
       <div class="path-card">
-        <div class="path-bar"><i></i><i></i><i></i><span>roadmap.sh — 新生成长路线</span></div>
+        <div class="path-bar"><i></i><i></i><i></i><span>成长路线 · ROADMAP</span></div>
         <div class="path-body" id="pathBody"></div>
       </div>
     </div>
@@ -238,7 +238,7 @@ footer p{font-size:13.5px;color:var(--paper2);line-height:1.8}
         <p class="kicker">Training Suite / 培训套件</p>
         <h2>四门课程，一条路线</h2>
         <div class="rule"></div>
-        <p class="desc">三个界面共享同一套几何视觉语言（硬阴影 · 数学网格 · 几何基元），却各有配色身份：<b>Git 苏式红黑</b>、<b>VSCode 蓝图蓝</b>、<b>C 语言瑞士红</b>。相似而不相同，认得清也分得开。</p>
+        <p class="desc">从协作工具到开发环境，再到 C 语言基础，最后迈向单片机硬件。四张卡片对应四门课，点进去就能开始学，建议按编号顺序推进。</p>
       </div>
 
       <div class="suite">
@@ -250,11 +250,11 @@ footer p{font-size:13.5px;color:var(--paper2);line-height:1.8}
               <span class="tut-icon ti-git"></span>
             </div>
             <h3>Git × GitHub 入门</h3>
-            <span class="en">Setup Guide · Soviet Constructivism</span>
+            <span class="en">Setup Guide · Git &amp; GitHub</span>
             <p>注册 GitHub 账号、安装 Git、完成身份与 SSH 密钥配置。三步打通现代协作开发的入口，为多人协作与代码托管做好准备。</p>
             <div class="tut-tags"><span>零基础友好</span><span>Windows 优先</span><span>约 30 分钟</span></div>
             <span class="tut-btn">进入教程 →</span>
-            <span class="tut-foot">苏式构成主义 · 红 / 黑 / 奶油</span>
+            <span class="tut-foot">第一步 · 协作入口</span>
           </div>
         </a>
 
@@ -266,27 +266,27 @@ footer p{font-size:13.5px;color:var(--paper2);line-height:1.8}
               <span class="tut-icon ti-vs"></span>
             </div>
             <h3>C 语言前导 × VSCode 配置</h3>
-            <span class="en">Environment · Color-scale Blue</span>
+            <span class="en">Environment · VSCode &amp; MinGW</span>
             <p>认识编译器与编辑器，装好 VSCode 与 MinGW，配置 C/C++ 扩展，跑通第一个程序。把写代码的工具链一次搭到位。</p>
             <div class="tut-tags"><span>环境搭建</span><span>MinGW</span><span>第一个程序</span></div>
             <span class="tut-btn" style="background:var(--blue)">进入教程 →</span>
-            <span class="tut-foot">色阶几何主义 · 蓝图蓝</span>
+            <span class="tut-foot">第二步 · 开发环境</span>
           </div>
         </a>
 
-        <a class="tut rv" href="../C语言培训/C语言学习教程.html" style="--ac:var(--cred)">
-          <div class="tut-accent" style="background:var(--cred)"></div>
+        <a class="tut rv" href="../C语言培训/C语言学习教程.html" style="--ac:var(--ink)">
+          <div class="tut-accent"></div>
           <div class="tut-body">
             <div class="tut-top">
-              <span class="tut-no" style="color:var(--cred)">03 · 语言基础</span>
+              <span class="tut-no">03 · 语言基础</span>
               <span class="tut-icon ti-c"></span>
             </div>
             <h3>C 语言学习教程</h3>
-            <span class="en">C Language · Swiss × Soviet</span>
-            <p>从第一个程序到指针与递归：58 章 · 17 模块 · 3 场考核，含缓冲区模拟器、图形生成器、汉诺塔递归可视化。桌面长期维护，持续增补。</p>
+            <span class="en">C Language · 58 Chapters</span>
+            <p>从第一个程序到指针与递归：58 章 · 17 模块 · 3 场考核，含缓冲区模拟器、图形生成器、汉诺塔递归可视化，边学边练。</p>
             <div class="tut-tags"><span>58 章</span><span>17 模块</span><span>3 场考核</span></div>
-            <span class="tut-btn" style="background:var(--cred)">进入教程 →</span>
-            <span class="tut-foot">瑞士国际主义 × 苏联美学 · 红</span>
+            <span class="tut-btn">进入教程 →</span>
+            <span class="tut-foot">第三步 · 语言基础</span>
           </div>
         </a>
 
@@ -300,10 +300,10 @@ footer p{font-size:13.5px;color:var(--paper2);line-height:1.8}
             </div>
             <h3>单片机学习</h3>
             <span class="en">MCU / STM32 · Coming Soon</span>
-            <p>预留入口：学完 C 语言与编译器基础后，进入 STM32 单片机开发 —— 寄存器、GPIO、串口、中断，把代码烧进真实硬件。</p>
+            <p>学完 C 语言与编译器基础后，进入 STM32 单片机开发 —— 寄存器、GPIO、串口、中断，把代码烧进真实硬件。</p>
             <div class="tut-tags"><span>待增补</span><span>STM32</span><span>嵌入式</span></div>
             <span class="tut-btn">敬请期待 · 待增补</span>
-            <span class="tut-foot">按键已预留 · 内容随后跟上</span>
+            <span class="tut-foot">第四步 · 硬件进阶</span>
           </div>
         </div>
       </div>
@@ -320,7 +320,7 @@ footer p{font-size:13.5px;color:var(--paper2);line-height:1.8}
       <div class="pathline rv">
         <div class="pl-step" style="--ac:var(--red)"><div class="n">01</div><div class="t">Git × GitHub</div><div class="d">先有协作与托管</div></div>
         <div class="pl-step" style="--ac:var(--blue)"><div class="n">02</div><div class="t">VSCode 环境</div><div class="d">搭好工具链</div></div>
-        <div class="pl-step" style="--ac:var(--cred)"><div class="n">03</div><div class="t">C 语言教程</div><div class="d">打牢语言基础</div></div>
+        <div class="pl-step" style="--ac:var(--ink)"><div class="n">03</div><div class="t">C 语言教程</div><div class="d">打牢语言基础</div></div>
         <div class="pl-step dim"><div class="n">04</div><div class="t">单片机</div><div class="d">敬请期待</div></div>
       </div>
     </div>
@@ -329,14 +329,14 @@ footer p{font-size:13.5px;color:var(--paper2);line-height:1.8}
   <section class="sec about" id="about">
     <div class="wrap">
       <div class="sec-head rv">
-        <p class="kicker">About / 关于本套件</p>
-        <h2>维护与归档约定</h2>
+        <p class="kicker">About / 关于电控组培训</p>
+        <h2>从这里开始</h2>
         <div class="rule"></div>
       </div>
       <div class="about-grid rv">
-        <div><b>桌面长期维护</b><p>本套件在桌面长期维护增补。C 语言教程按约定保留在 <span class="mono">C语言培训\</span> 文件夹，主页以相对链接引入，不提前移动。</p></div>
-        <div><b>归档门槛</b><p>学完结构体与指针之前的全部内容、进入编译器学习阶段后，方可整体归档至资料库 <span class="mono">05_嵌入式开发\01_培训与教程\</span>。</p></div>
-        <div><b>后续路线</b><p>C 语言之后：动态内存 → 预处理深入 → 文件操作 → 编译器学习，再进入单片机。第四张卡片已为此预留。</p></div>
+        <div><b>零基础起步</b><p>不需要任何编程基础。从注册账号、装好工具开始，一步步带你写出第一个程序，走进开发的世界。</p></div>
+        <div><b>动手实践</b><p>每个知识点都配可运行的代码与交互演示。代码要亲手敲一遍，报错先读提示信息，实践出真知。</p></div>
+        <div><b>循序渐进</b><p>按 Git → VSCode → C 语言 → 单片机 的顺序推进，打牢语言基础后再进阶硬件，把代码烧进真实电路。</p></div>
       </div>
     </div>
   </section>
@@ -346,28 +346,21 @@ footer p{font-size:13.5px;color:var(--paper2);line-height:1.8}
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <h6>嵌入式协会 · 新生培训套件</h6>
-        <p>一个主页串起 Git 协作、VSCode 环境、C 语言基础与未来的单片机学习。三个子界面相似而不相同，共享几何视觉语言，各有配色身份。</p>
+        <h6>机器人与人工智能创新协会 · 电控组培训</h6>
+        <p>一个主页串起 Git 协作、VSCode 环境、C 语言基础与未来的单片机学习，带你从零走进嵌入式开发。</p>
       </div>
       <div>
-        <h6>设计语言</h6>
-        <p>苏式构成主义 · 红黑海报几何<br>数学网格 · 硬阴影 · 红星与对角楔形</p>
-        <div class="swatches">
-          <div style="background:#B71C1C" title="Soviet Red"></div>
-          <div style="background:#161210" title="Ink"></div>
-          <div style="background:#EDE4D0" title="Cream"></div>
-          <div style="background:#2653D6" title="VSCode Blue"></div>
-          <div style="background:#D92323" title="C Swiss Red"></div>
-        </div>
+        <h6>快速导航</h6>
+        <p><a href="GitHub注册与Git安装配置教程.html">Git × GitHub 入门</a><br><a href="C语言学习前导与VSCode环境配置.html">VSCode 环境配置</a><br><a href="../C语言培训/C语言学习教程.html">C 语言学习教程</a><br>单片机 · 敬请期待</p>
       </div>
       <div>
-        <h6>套件文件</h6>
-        <p>Git 教程 · 同目录<br>VSCode 教程 · 同目录<br>C 语言教程 · <span class="mono">../C语言培训/</span><br>单片机 · 待增补</p>
+        <h6>学习建议</h6>
+        <p>按编号顺序学习<br>代码亲手敲一遍<br>报错先读提示信息<br>每天进步一字节</p>
       </div>
     </div>
     <div class="foot-line">
-      <span>EMBEDDED CLUB — TRAINING SUITE</span>
-      <span>RED · BLACK · CREAM · CONSTRUCTIVISM</span>
+      <span>机器人与人工智能创新协会 · 电控组</span>
+      <span>ROBOTICS &amp; AI · ELECTRONIC CONTROL</span>
     </div>
   </div>
 </footer>

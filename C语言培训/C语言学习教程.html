@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C 语言学习教程 · 嵌入式协会新生培训</title>
+<title>C 语言学习教程 · 机器人与人工智能创新协会电控组培训</title>
 <style>
 :root{
   --paper:#F4F1EA; --paper2:#EAE6DA; --ink:#171512; --ink2:#4A463D;
@@ -24,9 +24,10 @@ a{color:inherit;text-decoration:none}
 .topbar{border-bottom:2px solid var(--ink);background:var(--paper)}
 .topbar .wrap{display:flex;justify-content:space-between;align-items:center;padding-top:14px;padding-bottom:14px;font-size:12px;font-weight:700;letter-spacing:.25em;text-transform:uppercase}
 .topbar .dot{display:inline-block;width:10px;height:10px;background:var(--red);margin-right:10px;vertical-align:1px}
-.topbar-home{color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:9px}
-.topbar-home::before{content:"";width:10px;height:10px;background:var(--red)}
-.topbar-home:hover{color:var(--red)}
+.topbar-home{color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:9px;border:2px solid var(--ink);background:var(--paper);padding:6px 14px;box-shadow:3px 3px 0 var(--ink);font-weight:700;transition:background .2s,color .2s}
+.topbar-home::before{content:"";width:11px;height:11px;background:var(--red);flex:none}
+.topbar-home:hover{background:var(--red);color:#fff}
+.topbar-home:hover::before{background:#fff}
 
 /* ── 英雄区：构成主义海报 ── */
 .hero{position:relative;overflow:hidden;border-bottom:2px solid var(--ink)}
@@ -296,8 +297,8 @@ footer .wrap{padding:56px 32px 40px}
 
 <header class="topbar">
   <div class="wrap">
-    <span><span class="dot"></span>嵌入式协会 · EMBEDDED CLUB</span>
-    <a class="topbar-home" href="../嵌入式培训/index.html">培训主页 · C LANGUAGE TRAINING</a>
+    <span><span class="dot"></span>机器人与人工智能创新协会 · 电控组</span>
+    <a class="topbar-home" href="../嵌入式培训/index.html">← 返回培训主页</a>
   </div>
 </header>
 
@@ -308,7 +309,7 @@ footer .wrap{padding:56px 32px 40px}
   <div class="shape sh-star"></div>
   <div class="wrap">
     <div>
-      <div class="kicker">新生培训系列 · 桌面长期维护项目</div>
+      <div class="kicker">机器人与人工智能创新协会 · 电控组培训</div>
       <h1>C 语言<br><span class="redblock">学习教程</span></h1>
       <p class="sub">从第一个程序到指针与递归 —— 58 章 · 17 模块 · 3 场考核</p>
       <div class="meta">
@@ -360,7 +361,7 @@ footer .wrap{padding:56px 32px 40px}
     <a href="#mod16"><span class="no">16</span>进制与位</a>
     <a href="#mod17"><span class="no">17</span>指针进阶</a>
     <a href="#checklist"><span class="no">■</span>结业清单</a>
-    <div class="rail-note">本项目在桌面长期维护。学完结构体与指针之前的全部内容、进入编译器学习阶段后，方可归档至资料库。</div>
+    <div class="rail-note">按编号顺序推进，代码亲手敲一遍；"选学"章节可先跳过。</div>
   </nav>
 
   <main class="content">
@@ -2573,26 +2574,21 @@ ap[1][2];   // 6
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <h6>关于本项目</h6>
-        <p>嵌入式协会新生培训 · C 语言学习教程。桌面长期维护，已完成基础语法到函数、结构体、指针入门与递归（58 章 · 17 模块 · 3 场考核）；后续增补动态内存、文件操作等内容。学完结构体与指针之前的全部内容、进入编译器学习阶段后，方可归档至资料库。</p>
+        <h6>关于本教程</h6>
+        <p>机器人与人工智能创新协会电控组培训 · C 语言学习教程。从基础语法到函数、结构体、指针入门与递归（58 章 · 17 模块 · 3 场考核），配套交互演示，边学边练。</p>
       </div>
       <div>
-        <h6>设计语言</h6>
-        <p>瑞士国际主义 × 苏联构成主义<br>数学网格 · Helvetica 排印 · 红黑海报几何</p>
-        <div class="swatches">
-          <div style="background:#D92323" title="Soviet Red #D92323"></div>
-          <div style="background:#171512" title="Ink #171512"></div>
-          <div style="background:#F4F1EA" title="Paper #F4F1EA"></div>
-        </div>
+        <h6>快速导航</h6>
+        <p><a href="../嵌入式培训/index.html" style="color:var(--paper);text-decoration:underline">← 返回培训主页</a><br>前置：VSCode 环境配置教程<br>Git 基础：GitHub 注册与 Git 安装配置教程</p>
       </div>
       <div>
-        <h6>配套文件</h6>
-        <p>配套 Markdown：同目录《C语言学习教程.md》<br>前置：VSCode 环境配置教程<br>Git 基础：GitHub 注册与 Git 安装配置教程</p>
+        <h6>学习建议</h6>
+        <p>按章节顺序推进<br>代码亲手敲一遍<br>报错先读提示信息<br>每天进步一字节</p>
       </div>
     </div>
     <div class="foot-line">
-      <span>EMBEDDED CLUB — C TRAINING VOL.01</span>
-      <span>GRID · HELVETICA · CONSTRUCTIVISM</span>
+      <span>机器人与人工智能创新协会 · 电控组 — C TRAINING</span>
+      <span>C LANGUAGE · STEP BY STEP</span>
     </div>
   </div>
 </footer>

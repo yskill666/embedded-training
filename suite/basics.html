@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电脑基础与效率工具 · 机器人与人工智能创新协会电控组培训</title>
+<style>
+:root{
+  --paper:#EDE4D0; --paper2:#E2D6BC; --card:#F7F2E6; --white:#FBF8F1;
+  --ink:#161210; --ink2:#4A4132; --gray:#8F8064; --hair:#D2C4A4;
+  --gold:#E8B33A; --gold2:#C9971F; --red:#B71C1C; --blue:#2653D6; --green:#1B7A42;
+  --sans:"Helvetica Neue",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  --mono:"Cascadia Code",Consolas,"Courier New",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.7;overflow-x:hidden}
+a{color:var(--gold2)}
+::selection{background:var(--gold);color:var(--ink)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+#progress{position:fixed;top:0;left:0;height:5px;width:0;background:var(--gold);z-index:100}
+.topbar{border-bottom:2px solid var(--ink);background:var(--paper)}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:13px;padding-bottom:13px;font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+.topbar .dot{display:inline-block;width:11px;height:11px;background:var(--gold);border-radius:50%;margin-right:9px;vertical-align:-1px}
+.topbar-home{color:var(--ink);text-decoration:none;font-weight:700;border:2px solid var(--ink);background:var(--gold);padding:4px 12px;box-shadow:3px 3px 0 var(--ink)}
+.colorstrip{display:flex;height:7px;border-bottom:2px solid var(--ink)}
+.colorstrip i{flex:1}
+.colorstrip i:nth-child(1){background:var(--gold)} .colorstrip i:nth-child(2){background:var(--red)} .colorstrip i:nth-child(3){background:var(--blue)} .colorstrip i:nth-child(4){background:var(--green)} .colorstrip i:nth-child(5){background:var(--gray)} .colorstrip i:nth-child(6){background:var(--white)}
+.hero{position:relative;border-bottom:2px solid var(--ink);overflow:hidden;background-image:linear-gradient(var(--paper2) 1px,transparent 1px),linear-gradient(90deg,var(--paper2) 1px,transparent 1px);background-size:46px 46px}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding-top:70px;padding-bottom:76px}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);display:flex;align-items:center;gap:11px;margin-bottom:20px}
+.kicker::before{content:"";width:13px;height:13px;background:var(--gold)}
+.hero h1{font-size:clamp(2.6rem,6vw,4.6rem);line-height:1.05;font-weight:900;margin-bottom:22px}
+.goldblock{display:inline-block;background:var(--gold);color:var(--ink);padding:2px 16px;transform:rotate(-1.5deg);box-shadow:6px 6px 0 var(--ink)}
+.hero .lead{font-size:16.5px;color:var(--ink2);max-width:30em;margin-bottom:26px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+.hero-meta span{font-family:var(--mono);font-size:12.5px;border:2px solid var(--ink);background:var(--card);padding:5px 13px;box-shadow:3px 3px 0 var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:15px;text-decoration:none;border:2px solid var(--ink);padding:12px 24px;box-shadow:5px 5px 0 var(--ink);transition:transform .15s,box-shadow .15s;cursor:pointer;font-family:var(--sans)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+.btn-gold{background:var(--gold);color:var(--ink)}
+.btn-line{background:var(--card);color:var(--ink)}
+.hero-art{position:relative;height:400px}
+.shape{position:absolute;pointer-events:none}
+.ha-circle{width:200px;height:200px;border-radius:50%;background:var(--gold);border:3px solid var(--ink);top:-20px;right:10px;opacity:.9}
+.ha-ring{width:120px;height:120px;border:16px solid var(--ink);border-radius:50%;bottom:20px;left:30px}
+.ha-rect{width:200px;height:26px;background:var(--blue);border:2px solid var(--ink);bottom:110px;left:-20px;transform:rotate(-18deg)}
+.ha-tri{width:120px;height:120px;background:var(--red);clip-path:polygon(50% 0,100% 100%,0 100%);top:40px;left:60px;opacity:.85}
+.kb-poster{position:absolute;left:20px;right:20px;top:120px;z-index:3;background:var(--ink);border:2px solid var(--ink);box-shadow:11px 11px 0 var(--gold);padding:18px}
+.kb-poster .row{display:flex;gap:6px;margin-bottom:6px}
+.kb-poster .k{flex:1;height:30px;background:#2A241B;border:1px solid #4A4132;color:var(--gold);font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center}
+.kb-poster .k.hot{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.ticker{background:var(--ink);border-bottom:2px solid var(--ink);overflow:hidden;padding:12px 0}
+.ticker-track{display:inline-flex;white-space:nowrap;animation:marquee 30s linear infinite}
+.ticker span{font-family:var(--mono);font-size:13.5px;letter-spacing:.2em;color:var(--paper);padding:0 20px}
+.ticker b{color:var(--gold);font-weight:400}
+@keyframes marquee{to{transform:translateX(-50%)}}
+.layout{display:grid;grid-template-columns:230px 1fr;gap:40px;padding-top:50px;padding-bottom:70px}
+.rail{position:sticky;top:20px;align-self:start;border:2px solid var(--ink);background:var(--card);box-shadow:6px 6px 0 var(--ink);padding:16px}
+.rail-title{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--gray);margin-bottom:12px}
+.rail a{display:block;padding:7px 8px;text-decoration:none;color:var(--ink2);font-size:13.5px;border-left:3px solid transparent}
+.rail a.on{border-left-color:var(--gold);background:var(--paper);color:var(--ink);font-weight:700}
+.rail a .no{font-family:var(--mono);color:var(--gold2);margin-right:7px}
+.sec{margin-bottom:64px;scroll-margin-top:20px}
+.sec-head{margin-bottom:24px}
+.sec-head .kicker{margin-bottom:12px}
+.sec-head h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:900;line-height:1.15}
+.sec-head .rule{width:110px;height:7px;margin-top:14px;background:var(--gold);border:1.5px solid var(--ink)}
+.sec-head p.desc{color:var(--ink2);font-size:15px;max-width:46em;margin-top:14px}
+.panel{border:2px solid var(--ink);background:var(--white);box-shadow:7px 7px 0 var(--ink);padding:22px;margin-bottom:22px}
+.panel h3{font-size:17px;font-weight:900;margin-bottom:12px}
+.panel h3 .tag{font-family:var(--mono);font-size:10px;background:var(--gold);border:1.5px solid var(--ink);padding:1px 7px;margin-right:8px;vertical-align:2px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{border:1.5px solid var(--ink);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--gold);font-weight:800}
+td code,kbd{font-family:var(--mono);font-size:12.5px;background:var(--paper);border:1px solid var(--hair);padding:1px 6px}
+kbd{border:1.5px solid var(--ink);box-shadow:2px 2px 0 var(--ink);background:var(--card);font-weight:700}
+.note-line{font-size:13px;color:var(--ink2);border-left:4px solid var(--gold);background:var(--card);padding:10px 14px;margin-top:14px}
+/* keyboard */
+.kb{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.kb-board{flex:1;min-width:320px;background:var(--card);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:12px}
+.kb-row{display:flex;gap:5px;margin-bottom:5px}
+.key{flex:1;min-width:0;height:38px;background:var(--white);border:1.5px solid var(--ink);box-shadow:2px 2px 0 var(--ink);font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .12s,transform .12s;user-select:none}
+.key.w2{flex:2}.key.w3{flex:3}.key.w6{flex:6}
+.key.lit{background:var(--gold);transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink);font-weight:700}
+.kb-nav{display:grid;grid-template-columns:repeat(3,44px);gap:5px}
+.kb-nav .key{height:34px}
+.kb-side{flex:1;min-width:260px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.chip{font-family:var(--mono);font-size:11.5px;border:1.5px solid var(--ink);background:var(--white);padding:4px 9px;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
+.chip.on{background:var(--gold);font-weight:700}
+.chip-group{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--gray);margin:10px 0 6px}
+#kbDesc{border:2px solid var(--ink);background:var(--ink);color:var(--paper);padding:14px;min-height:74px;font-size:14px}
+#kbDesc b{color:var(--gold)}
+/* explorer */
+.explorer{border:2px solid var(--ink);box-shadow:7px 7px 0 var(--ink);background:var(--white)}
+.exp-bar{display:flex;align-items:center;gap:8px;background:var(--card);border-bottom:2px solid var(--ink);padding:8px 12px;font-family:var(--mono);font-size:12px}
+.exp-bar .addr{flex:1;border:1.5px solid var(--ink);background:var(--white);padding:3px 9px}
+.exp-body{display:grid;grid-template-columns:200px 1fr;min-height:260px}
+.exp-tree{border-right:2px solid var(--ink);background:var(--card);padding:10px;font-size:13px}
+.exp-tree .tnode{padding:3px 6px;cursor:pointer;font-family:var(--mono);font-size:12px}
+.exp-tree .tnode.on{background:var(--gold);font-weight:700}
+.exp-tree .indent{padding-left:16px}
+.exp-files{padding:10px}
+.exp-file{display:flex;align-items:center;gap:9px;padding:6px 8px;cursor:pointer;border:1.5px solid transparent;font-size:13.5px}
+.exp-file:hover{background:var(--paper)}
+.exp-file.on{border-color:var(--ink);background:var(--card);box-shadow:2px 2px 0 var(--ink)}
+.exp-file .ic{width:16px;height:16px;flex:none;border:1px solid var(--ink)}
+.ic-folder{background:var(--gold)} .ic-web{background:var(--blue)} .ic-code{background:var(--green)} .ic-txt{background:var(--white)} .ic-exe{background:var(--red)} .ic-zip{background:var(--gray)} .ic-doc{background:var(--paper2)}
+.exp-file .fname{font-family:var(--mono);font-size:12.5px}
+.exp-foot{border-top:2px solid var(--ink);background:var(--card);padding:8px 12px;font-size:12.5px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+#fileInfo{flex:1;min-width:220px;font-family:var(--mono);font-size:12px}
+#fileInfo .warn{color:var(--red);font-weight:700}
+.switch{display:flex;align-items:center;gap:7px;font-size:12.5px;cursor:pointer}
+/* cmd */
+.cmd{background:var(--ink);border:2px solid var(--ink);box-shadow:7px 7px 0 var(--gold);color:var(--paper);font-family:var(--mono);font-size:13px}
+.cmd-bar{display:flex;gap:7px;align-items:center;background:#211C14;border-bottom:2px solid #3A372F;padding:8px 12px}
+.cmd-bar i{width:11px;height:11px;border-radius:50%}
+.cmd-bar i:nth-child(1){background:var(--red)} .cmd-bar i:nth-child(2){background:var(--gold)} .cmd-bar i:nth-child(3){background:var(--green)}
+.cmd-bar span{color:var(--gray);font-size:11.5px;margin-left:8px;letter-spacing:.1em}
+#cmdOut{padding:14px 16px;height:280px;overflow-y:auto;white-space:pre-wrap;line-height:1.6}
+#cmdOut .in{color:var(--gold)}
+#cmdOut .err{color:#FF6B5E}
+.cmd-line{display:flex;gap:8px;align-items:center;border-top:1px solid #3A372F;padding:10px 16px}
+#cmdPrompt{color:var(--gold)}
+#cmdInput{flex:1;background:transparent;border:none;outline:none;color:var(--paper);font-family:var(--mono);font-size:13px}
+.cmd-quick{display:flex;flex-wrap:wrap;gap:7px;padding:10px 16px;border-top:1px solid #3A372F}
+.cmd-quick button{font-family:var(--mono);font-size:11px;background:#2A241B;color:var(--gold);border:1px solid #4A4132;padding:3px 9px;cursor:pointer}
+/* ai cards */
+.ai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.ai-card{border:2px solid var(--ink);background:var(--white);box-shadow:5px 5px 0 var(--ink);padding:16px;display:flex;flex-direction:column;gap:8px}
+.ai-card .nm{font-weight:900;font-size:16px}
+.ai-card .dm{font-family:var(--mono);font-size:11px;color:var(--gold2);word-break:break-all}
+.ai-card p{font-size:12.5px;color:var(--ink2);flex:1}
+.ai-card .val{font-size:11.5px;border-top:1.5px dashed var(--hair);padding-top:8px;color:var(--ink)}
+.ai-card .val b{color:var(--gold2)}
+.check{border:2px solid var(--ink);background:var(--card);box-shadow:7px 7px 0 var(--ink);padding:22px}
+.check li{list-style:none;margin-bottom:9px;font-size:14px;padding-left:26px;position:relative}
+.check li::before{content:"";position:absolute;left:0;top:4px;width:14px;height:14px;border:2px solid var(--ink);background:var(--white)}
+footer{background:var(--ink);color:var(--paper2);padding:44px 0 30px;margin-top:20px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13px}
+footer a{color:var(--gold)}
+#toTop{position:fixed;right:24px;bottom:24px;width:46px;height:46px;background:var(--gold);color:var(--ink);font-size:20px;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);cursor:pointer;z-index:80;opacity:0;pointer-events:none;transition:opacity .3s}
+#toTop.show{opacity:1;pointer-events:auto}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s cubic-bezier(.22,1,.36,1)}
+.rv.on{opacity:1;transform:none}
+@media (max-width:960px){.hero .wrap{grid-template-columns:1fr}.hero-art{height:320px}.layout{grid-template-columns:1fr}.rail{position:static}.ai-grid{grid-template-columns:repeat(2,1fr)}.exp-body{grid-template-columns:1fr}.exp-tree{border-right:none;border-bottom:2px solid var(--ink)}}
+@media (max-width:640px){.ai-grid{grid-template-columns:1fr}.kb{flex-direction:column}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <div class="wrap">
+    <span><span class="dot"></span>机器人与人工智能创新协会 · 电控组</span>
+    <a class="topbar-home" href="index.html">← 培训主页</a>
+  </div>
+</header>
+<div class="colorstrip"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="kicker">机器人与人工智能创新协会 · 电控组培训</p>
+      <h1>电脑基础<br><span class="goldblock">与效率工具</span></h1>
+      <p class="lead">在写第一行代码之前，先把电脑用顺：快捷键、文件与后缀、命令行、GitHub 加速、国内 AI 工具。这一课不写代码，只练手上功夫。</p>
+      <div class="hero-meta"><span>零基础友好</span><span>前置课</span><span>动手交互</span></div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a class="btn btn-gold" href="#m1">开始练 →</a>
+        <a class="btn btn-line" href="#check">结业清单</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="shape ha-circle"></div>
+      <div class="shape ha-ring"></div>
+      <div class="shape ha-rect"></div>
+      <div class="shape ha-tri"></div>
+      <div class="kb-poster">
+        <div class="row"><span class="k hot">Ctrl</span><span class="k hot">C</span><span class="k">复制</span></div>
+        <div class="row"><span class="k hot">Ctrl</span><span class="k hot">V</span><span class="k">粘贴</span></div>
+        <div class="row"><span class="k hot">Win</span><span class="k hot">E</span><span class="k">资源管理器</span></div>
+        <div class="row"><span class="k hot">Win</span><span class="k hot">Shift</span><span class="k hot">S</span><span class="k">截图</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker"><div class="ticker-track" id="tickerTrack">
+  <span>快捷键练成肌肉记忆</span><b>★</b><span>看清后缀再双击</span><b>★</b><span>删除命令不可逆</span><b>★</b><span>加速只走官方渠道</span><b>★</b><span>AI 会幻觉 要验证</span><b>★</b>
+</div></div>
+
+<div class="wrap layout">
+  <nav class="rail" id="rail">
+    <div class="rail-title">目录 / INDEX</div>
+    <a href="#m1"><span class="no">01</span>键盘与快捷键</a>
+    <a href="#m2"><span class="no">02</span>文件资源管理</a>
+    <a href="#m3"><span class="no">03</span>CMD 终端入门</a>
+    <a href="#m4"><span class="no">04</span>GitHub 合法加速</a>
+    <a href="#m5"><span class="no">05</span>国内 AI 与智能体</a>
+    <a href="#check"><span class="no">◆</span>结业清单</a>
+  </nav>
+
+  <main>
+    <section class="sec rv" id="m1">
+      <div class="sec-head">
+        <p class="kicker">MODULE 01</p>
+        <h2>键盘与常用快捷键</h2>
+        <div class="rule"></div>
+        <p class="desc">点右侧任意组合键，键盘图上会亮起它用到的键。先认键位，再关掉页面凭记忆在真机上做一遍。</p>
+      </div>
+      <div class="panel">
+        <div class="kb">
+          <div class="kb-board" id="kbBoard">
+            <div class="kb-row"><span class="key" data-k="esc">Esc</span><span class="key" data-k="f1">F1</span><span class="key" data-k="f2">F2</span><span class="key" data-k="f3">F3</span><span class="key" data-k="f4">F4</span><span class="key" data-k="f5">F5</span><span class="key" data-k="f6">F6</span><span class="key" data-k="f7">F7</span><span class="key" data-k="f8">F8</span><span class="key" data-k="f9">F9</span><span class="key" data-k="f10">F10</span><span class="key" data-k="f11">F11</span><span class="key" data-k="f12">F12</span></div>
+            <div class="kb-row"><span class="key" data-k="`">~</span><span class="key" data-k="1">1</span><span class="key" data-k="2">2</span><span class="key" data-k="3">3</span><span class="key" data-k="4">4</span><span class="key" data-k="5">5</span><span class="key" data-k="6">6</span><span class="key" data-k="7">7</span><span class="key" data-k="8">8</span><span class="key" data-k="9">9</span><span class="key" data-k="0">0</span><span class="key w2" data-k="back">⌫</span></div>
+            <div class="kb-row"><span class="key w2" data-k="tab">Tab</span><span class="key" data-k="q">Q</span><span class="key" data-k="w">W</span><span class="key" data-k="e">E</span><span class="key" data-k="r">R</span><span class="key" data-k="t">T</span><span class="key" data-k="y">Y</span><span class="key" data-k="u">U</span><span class="key" data-k="i">I</span><span class="key" data-k="o">O</span><span class="key" data-k="p">P</span><span class="key" data-k="[">[</span><span class="key" data-k="]">]</span></div>
+            <div class="kb-row"><span class="key w2" data-k="caps">Caps</span><span class="key" data-k="a">A</span><span class="key" data-k="s">S</span><span class="key" data-k="d">D</span><span class="key" data-k="f">F</span><span class="key" data-k="g">G</span><span class="key" data-k="h">H</span><span class="key" data-k="j">J</span><span class="key" data-k="k">K</span><span class="key" data-k="l">L</span><span class="key" data-k=";">;</span><span class="key w2" data-k="enter">Enter</span></div>
+            <div class="kb-row"><span class="key w2" data-k="shift">Shift</span><span class="key" data-k="z">Z</span><span class="key" data-k="x">X</span><span class="key" data-k="c">C</span><span class="key" data-k="v">V</span><span class="key" data-k="b">B</span><span class="key" data-k="n">N</span><span class="key" data-k="m">M</span><span class="key" data-k=",">,</span><span class="key" data-k=".">.</span><span class="key w2" data-k="shift">Shift</span></div>
+            <div class="kb-row"><span class="key w2" data-k="ctrl">Ctrl</span><span class="key" data-k="win">Win</span><span class="key w2" data-k="alt">Alt</span><span class="key w6" data-k="space">Space</span><span class="key w2" data-k="alt">Alt</span><span class="key" data-k="win">Win</span><span class="key w2" data-k="ctrl">Ctrl</span></div>
+          </div>
+          <div class="kb-nav">
+            <span class="key" data-k="home">Home</span><span class="key" data-k="up">↑</span><span class="key" data-k="end">End</span>
+            <span class="key" data-k="left">←</span><span class="key" data-k="down">↓</span><span class="key" data-k="right">→</span>
+          </div>
+          <div class="kb-side">
+            <div class="chip-group">编辑</div><div class="chips" data-g="edit"></div>
+            <div class="chip-group">窗口 / 系统</div><div class="chips" data-g="win"></div>
+            <div class="chip-group">浏览器 / 文本</div><div class="chips" data-g="txt"></div>
+            <div id="kbDesc">点一个组合键看看。</div>
+          </div>
+        </div>
+        <div class="note-line">组合键按法：先按住修饰键（Ctrl/Shift/Alt/Win）不放，再按字母键，然后一起松开。每天练 5 个，一周成肌肉记忆。</div>
+      </div>
+    </section>
+
+    <section class="sec rv" id="m2">
+      <div class="sec-head">
+        <p class="kicker">MODULE 02</p>
+        <h2>文件资源管理：目录、路径与后缀</h2>
+        <div class="rule"></div>
+        <p class="desc">目录=文件夹，是一棵倒过来的树；路径是地址；后缀告诉系统文件类型。下面这张"资源管理器"卡牌可以点：左树切换目录、右列表点文件看后缀，还能开关"隐藏后缀"体验双后缀陷阱。</p>
+      </div>
+      <div class="explorer">
+        <div class="exp-bar"><span>📁</span><span class="addr" id="expAddr">C:\Users\Admin\Desktop\suite</span><span>资源管理器</span></div>
+        <div class="exp-body">
+          <div class="exp-tree" id="expTree"></div>
+          <div class="exp-files" id="expFiles"></div>
+        </div>
+        <div class="exp-foot">
+          <label class="switch"><input type="checkbox" id="extToggle"> 隐藏已知后缀（体验陷阱）</label>
+          <div id="fileInfo">点一个文件查看它的后缀与类型。</div>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:22px">
+        <h3><span class="tag">概念</span>目录 / 路径 / 后缀</h3>
+        <table>
+          <tr><th>术语</th><th>含义</th><th>例子</th></tr>
+          <tr><td>目录 / 文件夹</td><td>装文件和其它文件夹的容器</td><td><code>Desktop\suite</code></td></tr>
+          <tr><td>根目录 / 盘符</td><td>一个盘的最顶层起点</td><td><code>C:\</code></td></tr>
+          <tr><td>父 / 子目录</td><td>上一层 / 下一层</td><td>Desktop 是 suite 的父目录</td></tr>
+          <tr><td>绝对路径</td><td>从盘符写全的地址</td><td><code>C:\Users\Admin\Desktop\suite\index.html</code></td></tr>
+          <tr><td>相对路径</td><td>以当前目录为起点</td><td><code>..\c\index.html</code></td></tr>
+          <tr><td>. 与 ..</td><td>当前目录 / 上一级目录</td><td><code>cd ..</code></td></tr>
+          <tr><td>后缀 / 扩展名</td><td>最后一个点后的部分，决定类型与打开方式</td><td><code>index.html</code> → html</td></tr>
+        </table>
+        <div class="note-line"><b>安全：</b>打开"显示文件扩展名"（Win11：查看→显示→文件扩展名；Win10：查看→勾选文件扩展名）。否则 <code>病毒.jpg.exe</code> 会伪装成 <code>病毒.jpg</code>。改后缀不会改变文件内容，乱改只会让系统不知用什么打开。</div>
+      </div>
+      <div class="panel">
+        <h3><span class="tag">速查</span>常见后缀</h3>
+        <table>
+          <tr><th>后缀</th><th>类型</th><th>后缀</th><th>类型</th></tr>
+          <tr><td><code>.txt</code> / <code>.md</code></td><td>纯文本 / Markdown</td><td><code>.jpg</code> / <code>.png</code> / <code>.svg</code></td><td>图片</td></tr>
+          <tr><td><code>.html</code> / <code>.css</code> / <code>.js</code></td><td>网页</td><td><code>.mp3</code> / <code>.mp4</code></td><td>音频 / 视频</td></tr>
+          <tr><td><code>.c</code> / <code>.h</code> / <code>.py</code></td><td>源码</td><td><code>.pdf</code></td><td>便携文档</td></tr>
+          <tr><td><code>.exe</code> / <code>.msi</code> / <code>.bat</code></td><td>可执行 / 安装 / 脚本</td><td><code>.docx</code> / <code>.xlsx</code> / <code>.pptx</code></td><td>Office</td></tr>
+          <tr><td><code>.zip</code> / <code>.7z</code> / <code>.rar</code></td><td>压缩包</td><td><code>.json</code> / <code>.csv</code> / <code>.lnk</code></td><td>数据 / 快捷方式</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="sec rv" id="m3">
+      <div class="sec-head">
+        <p class="kicker">MODULE 03</p>
+        <h2>终端入门：简易 CMD 指令</h2>
+        <div class="rule"></div>
+        <p class="desc">终端=用打字代替鼠标指挥电脑。下面是一个安全沙盒模拟 CMD，真的可以敲命令练手，不会动你真实文件。真机打开方式：Win+R → 输入 cmd → 回车。</p>
+      </div>
+      <div class="cmd">
+        <div class="cmd-bar"><i></i><i></i><i></i><span>CMD 沙盒 · 练习用</span></div>
+        <div id="cmdOut"></div>
+        <div class="cmd-line"><span id="cmdPrompt">C:\Users\Admin&gt;</span><input id="cmdInput" autocomplete="off" spellcheck="false" placeholder="输入命令后回车，如 dir / help"></div>
+        <div class="cmd-quick" id="cmdQuick"></div>
+      </div>
+      <div class="panel" style="margin-top:22px">
+        <h3><span class="tag">必会</span>基础命令</h3>
+        <table>
+          <tr><th>命令</th><th>作用</th><th>命令</th><th>作用</th></tr>
+          <tr><td><code>dir</code></td><td>列当前目录</td><td><code>type 文件</code></td><td>看文本内容</td></tr>
+          <tr><td><code>cd 目录</code> / <code>cd ..</code></td><td>进入 / 回上一级</td><td><code>cls</code></td><td>清屏</td></tr>
+          <tr><td><code>mkdir 名</code> / <code>rd 名</code></td><td>建 / 删空目录</td><td><code>echo 文字</code></td><td>打印一行</td></tr>
+          <tr><td><code>del 文件</code></td><td>删文件（不可逆）</td><td><code>tree</code></td><td>树状目录</td></tr>
+          <tr><td><code>copy</code> / <code>move</code> / <code>ren</code></td><td>复制 / 移动 / 改名</td><td><code>ipconfig</code> / <code>ping</code></td><td>看 IP / 测连通</td></tr>
+        </table>
+        <div class="note-line">三个好习惯：操作前先 <code>dir</code> 看清当前目录；路径带空格加引号；<code>del</code>/<code>rd</code> 不进回收站，回车前想清楚。CMD 之外还有 PowerShell 与 Git Bash（后面 Git 课用），命令略有差异。</div>
+      </div>
+    </section>
+
+    <section class="sec rv" id="m4">
+      <div class="sec-head">
+        <p class="kicker">MODULE 04</p>
+        <h2>GitHub 访问与合法加速</h2>
+        <div class="rule"></div>
+        <p class="desc">国内直连 GitHub 常转圈/超时，是链路问题不是电脑坏。推荐开源免费的 Watt Toolkit（原 Steam++）做本地择优加速。</p>
+      </div>
+      <div class="panel">
+        <h3><span class="tag">推荐</span>Watt Toolkit（原 Steam++）</h3>
+        <p style="font-size:14px;color:var(--ink2);margin-bottom:12px">开源免费本地反向代理工具箱：在本机起代理、自动挑当前网络下最优节点转发，从而正常打开 GitHub。官网 <a href="https://steampp.net/" target="_blank" rel="noopener">steampp.net</a>，开源仓库 <a href="https://github.com/BeyondDimension/SteamTools" target="_blank" rel="noopener">BeyondDimension/SteamTools</a>，微软商店搜 "Watt Toolkit" 也可。</p>
+        <table>
+          <tr><th>步</th><th>操作</th></tr>
+          <tr><td>1</td><td>官网 / 微软商店 / 官方 Releases 下载安装</td></tr>
+          <tr><td>2</td><td>打开 → 左侧"网络加速"</td></tr>
+          <tr><td>3</td><td>勾选 <b>GitHub</b> → 点"一键加速"</td></tr>
+          <tr><td>4</td><td>按指引信任本地证书（本地代理所需）</td></tr>
+          <tr><td>5</td><td>访问 github.com 正常打开即成功；clone 变快</td></tr>
+          <tr><td>6</td><td>不用时点"停止加速"</td></tr>
+        </table>
+        <div class="note-line"><b>合规边界：</b>只做正常访问加速，遵守法律与网站条款；只从官方渠道下载；不用时停止加速并可移除本地证书。加速≠法外之地。</div>
+      </div>
+      <div class="panel">
+        <h3><span class="tag">备选</span>其它思路（了解）</h3>
+        <p style="font-size:13.5px;color:var(--ink2)">改 hosts 把域名指向可用 IP（需维护、易失效）；换公共 DNS 如 <code>223.5.5.5</code> / <code>119.29.29.29</code> 缓解 DNS 污染；克隆慢可考虑可信镜像。新手优先 Watt Toolkit 图形化最省事。</p>
+      </div>
+    </section>
+
+    <section class="sec rv" id="m5">
+      <div class="sec-head">
+        <p class="kicker">MODULE 05</p>
+        <h2>国内 AI 工具与智能体（Agent）</h2>
+        <div class="rule"></div>
+        <p class="desc">对话模型是"一问一答"；智能体是"交一项任务，它自己规划→调工具→多步执行→给结果"。先会用对话，再逛智能体广场。</p>
+      </div>
+      <div class="panel"><h3><span class="tag">对话</span>几大 AI 官网</h3><div class="ai-grid" id="aiChat"></div>
+        <div class="note-line"><b>边界：</b>AI 会幻觉，关键结论自己验证；学 C 先自己写再对照 AI，别直接抄；不要把密码 / token / 隐私贴给 AI。</div>
+      </div>
+      <div class="panel"><h3><span class="tag">Agent</span>智能体平台</h3><div class="ai-grid" id="aiAgent"></div>
+        <div class="note-line">先逛广场挑现成的（翻译 / PPT / 代码审查 / 文献总结）直接用；有兴趣再到 Coze / 文心智能体自己搭一个，比如"电控组新生答疑助手"。</div>
+      </div>
+    </section>
+
+    <section class="sec rv" id="check">
+      <div class="sec-head"><p class="kicker">CHECKLIST</p><h2>结业自查清单</h2><div class="rule"></div></div>
+      <ul class="check">
+        <li>能盲按 Ctrl+C/V/X/Z/S/A/F 与 Alt+Tab、Win+E、Win+Shift+S。</li>
+        <li>能说出目录/父目录/根目录/绝对路径/相对路径，看懂 <code>..</code>。</li>
+        <li>已打开"显示文件扩展名"，认全常见后缀，知道双后缀陷阱。</li>
+        <li>会在 CMD 里 dir / cd / mkdir / echo / cls，知道删除不可逆。</li>
+        <li>会用 Watt Toolkit 合法加速 GitHub，只从官方渠道下载。</li>
+        <li>至少用过 2 个 AI 官网 + 1 个智能体广场，知道幻觉与隐私边界。</li>
+      </ul>
+      <div class="note-line" style="margin-top:18px">下一步：<a href="git.html">Git × GitHub 入门</a> → <a href="vscode.html">VSCode 环境配置</a> → <a href="../c/index.html">C 语言学习教程</a>。</div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>机器人与人工智能创新协会 · 电控组培训</span>
+    <span><a href="index.html">← 返回培训主页</a></span>
+  </div>
+</footer>
+<button id="toTop" aria-label="回到顶部">↑</button>
+
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s)};
+  // progress + toTop + reveal + rail
+  var prog=$('#progress'),toTop=$('#toTop');
+  addEventListener('scroll',function(){var h=document.documentElement;var p=h.scrollTop/(h.scrollHeight-h.clientHeight);prog.style.width=(p*100)+'%';toTop.classList.toggle('show',h.scrollTop>400);},{passive:true});
+  toTop.onclick=function(){scrollTo({top:0,behavior:'smooth'})};
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('on')})},{threshold:.08});
+  document.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+  var railLinks=[].slice.call(document.querySelectorAll('#rail a'));
+  var secIo=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){railLinks.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'-30% 0px -60% 0px'});
+  document.querySelectorAll('.sec').forEach(function(s){secIo.observe(s)});
+  var tt=$('#tickerTrack');tt.innerHTML+=tt.innerHTML;
+
+  // ---- keyboard ----
+  var SHORTCUTS=[
+    {g:'edit',k:['ctrl','c'],t:'Ctrl+C',d:'复制选中内容到剪贴板。'},
+    {g:'edit',k:['ctrl','v'],t:'Ctrl+V',d:'粘贴剪贴板内容。'},
+    {g:'edit',k:['ctrl','x'],t:'Ctrl+X',d:'剪切（移走）选中内容。'},
+    {g:'edit',k:['ctrl','z'],t:'Ctrl+Z',d:'撤销上一步，做错往回退。'},
+    {g:'edit',k:['ctrl','y'],t:'Ctrl+Y',d:'重做，撤销的反悔。'},
+    {g:'edit',k:['ctrl','a'],t:'Ctrl+A',d:'全选当前内容。'},
+    {g:'edit',k:['ctrl','s'],t:'Ctrl+S',d:'保存，养成随手按的习惯。'},
+    {g:'edit',k:['ctrl','f'],t:'Ctrl+F',d:'在当前页/文档里查找。'},
+    {g:'win',k:['alt','tab'],t:'Alt+Tab',d:'在打开的窗口间切换。'},
+    {g:'win',k:['alt','f4'],t:'Alt+F4',d:'关闭当前窗口。'},
+    {g:'win',k:['win','d'],t:'Win+D',d:'显示桌面，再按恢复。'},
+    {g:'win',k:['win','e'],t:'Win+E',d:'打开文件资源管理器。'},
+    {g:'win',k:['win','l'],t:'Win+L',d:'锁屏，离开座位必按。'},
+    {g:'win',k:['win','r'],t:'Win+R',d:'打开"运行"对话框。'},
+    {g:'win',k:['win','shift','s'],t:'Win+Shift+S',d:'区域截图，截完在剪贴板可 Ctrl+V。'},
+    {g:'win',k:['ctrl','shift','esc'],t:'Ctrl+Shift+Esc',d:'直接打开任务管理器。'},
+    {g:'win',k:['win','tab'],t:'Win+Tab',d:'任务视图，看所有窗口/虚拟桌面。'},
+    {g:'txt',k:['ctrl','t'],t:'Ctrl+T',d:'浏览器新建标签页。'},
+    {g:'txt',k:['ctrl','w'],t:'Ctrl+W',d:'关闭当前标签页。'},
+    {g:'txt',k:['ctrl','shift','t'],t:'Ctrl+Shift+T',d:'恢复刚关掉的标签页。'},
+    {g:'txt',k:['ctrl','l'],t:'Ctrl+L',d:'跳到地址栏。'},
+    {g:'txt',k:['f5'],t:'F5',d:'刷新当前页。'},
+    {g:'txt',k:['f2'],t:'F2',d:'重命名选中的文件。'},
+    {g:'txt',k:['f11'],t:'F11',d:'全屏切换。'},
+    {g:'txt',k:['home'],t:'Home',d:'跳到行首。'},
+    {g:'txt',k:['end'],t:'End',d:'跳到行尾。'},
+    {g:'txt',k:['ctrl','home'],t:'Ctrl+Home',d:'跳到文档开头。'},
+    {g:'txt',k:['ctrl','end'],t:'Ctrl+End',d:'跳到文档结尾。'},
+    {g:'txt',k:['shift','left'],t:'Shift+←',d:'向左逐字选中。'}
+  ];
+  var desc=$('#kbDesc');
+  function light(keys){document.querySelectorAll('.key.lit').forEach(function(k){k.classList.remove('lit')});keys.forEach(function(k){document.querySelectorAll('.key[data-k="'+k+'"]').forEach(function(el){el.classList.add('lit')})});}
+  SHORTCUTS.forEach(function(s){
+    var box=document.querySelector('.chips[data-g="'+s.g+'"]');
+    var b=document.createElement('button');b.className='chip';b.type='button';b.textContent=s.t;
+    b.onclick=function(){document.querySelectorAll('.chip.on').forEach(function(c){c.classList.remove('on')});b.classList.add('on');light(s.k);desc.innerHTML='<b>'+s.t+'</b> — '+s.d;};
+    box.appendChild(b);
+  });
+  document.querySelectorAll('.key').forEach(function(k){k.addEventListener('click',function(){light([k.getAttribute('data-k')]);desc.innerHTML='<b>'+k.textContent+'</b> 键。点组合键芯片看它参与的快捷键。';});});
+
+  // ---- explorer ----
+  var FS={
+    'Desktop':{type:'dir',children:{'suite':{type:'dir',children:{'index.html':{ext:'html',kind:'web',type:'网页'},'git.html':{ext:'html',kind:'web',type:'网页'},'vscode.html':{ext:'html',kind:'web',type:'网页'},'basics.html':{ext:'html',kind:'web',type:'网页'},'basics.md':{ext:'md',kind:'txt',type:'Markdown'}}},'c':{type:'dir',children:{'index.html':{ext:'html',kind:'web',type:'网页'},'c.md':{ext:'md',kind:'txt',type:'Markdown'},'hello.c':{ext:'c',kind:'code',type:'C 源码'}}},'note.txt':{ext:'txt',kind:'txt',type:'纯文本'}}},
+    'Documents':{type:'dir',children:{'report.docx':{ext:'docx',kind:'doc',type:'Office 文档'},'data.xlsx':{ext:'xlsx',kind:'doc',type:'Office 表格'}}},
+    'Downloads':{type:'dir',children:{'setup.exe':{ext:'exe',kind:'exe',type:'可执行程序'},'photo.jpg.exe':{ext:'exe',kind:'exe',type:'可执行（伪装成图片）',trap:true},'archive.zip':{ext:'zip',kind:'zip',type:'压缩包'}}}
+  };
+  var BASE=['C:','Users','Admin'];
+  var cur=['Desktop','suite'];
+  var hideExt=false, selFile=null;
+  var tree=$('#expTree'),files=$('#expFiles'),addr=$('#expAddr'),info=$('#fileInfo');
+  function nodeAt(path){var n={children:FS};for(var i=0;i<path.length;i++){n=n.children[path[i]];}return n;}
+  function displayName(name,f){if(hideExt&&f.ext){var dot=name.lastIndexOf('.');if(dot>0)return name.slice(0,dot);}return name;}
+  function renderTree(){tree.innerHTML='';var root=document.createElement('div');root.className='tnode';root.textContent='C:\\Users\\Admin';root.onclick=function(){cur=[];selFile=null;render();};tree.appendChild(root);
+    function walk(obj,path,depth){Object.keys(obj).forEach(function(name){var f=obj[name];if(f.type!=='dir')return;var d=document.createElement('div');d.className='tnode'+(depth?' indent':'')+(cur.join('/')===path.concat(name).join('/')?' on':'');d.textContent='📁 '+name;d.onclick=function(){cur=path.concat(name);selFile=null;render();};tree.appendChild(d);walk(f.children,path.concat(name),depth+1);});}
+    walk(FS,[],0);}
+  function renderFiles(){files.innerHTML='';var n=nodeAt(cur);addr.textContent=BASE.concat(cur).join('\\');
+    Object.keys(n.children).forEach(function(name){var f=n.children[name];var row=document.createElement('div');row.className='exp-file'+(selFile===name?' on':'');
+      var ic=document.createElement('span');ic.className='ic '+(f.type==='dir'?'ic-folder':'ic-'+f.kind);
+      var nm=document.createElement('span');nm.className='fname';nm.textContent=(f.type==='dir'?'📁 ':'')+displayName(name,f);
+      row.appendChild(ic);row.appendChild(nm);
+      row.onclick=function(){if(f.type==='dir'){cur=cur.concat(name);selFile=null;render();}else{selFile=name;render();showInfo(name,f);}};
+      files.appendChild(row);});}
+  function showInfo(name,f){var real=name;var shown=displayName(name,f);
+    if(f.trap&&hideExt){info.innerHTML='显示为 <b>'+shown+'</b>，但真实后缀是 <span class="warn">.exe（可执行！）</span> —— 这就是双后缀陷阱，别双击。';}
+    else if(f.trap){info.innerHTML='<b>'+real+'</b> · 后缀 <span class="warn">.exe</span> · '+f.type+'。名字里带 .jpg 只是伪装。';}
+    else{info.innerHTML='<b>'+real+'</b> · 后缀 <b>.'+f.ext+'</b> · '+f.type;}}
+  function render(){renderTree();renderFiles();if(selFile){var f=nodeAt(cur).children[selFile];if(f)showInfo(selFile,f);}}
+  $('#extToggle').onchange=function(){hideExt=this.checked;render();if(!selFile)info.innerHTML=hideExt?'已隐藏后缀：注意 Downloads 里的 photo.jpg.exe 现在"看起来像图片"。':'点一个文件查看它的后缀与类型。';};
+  render();
+
+  // ---- cmd sandbox ----
+  var CFS={type:'dir',children:{
+    'Desktop':{type:'dir',children:{
+      'suite':{type:'dir',children:{'index.html':{type:'file',content:'<html>…培训主页…</html>'}}},
+      'note.txt':{type:'file',content:'记得练快捷键。'}
+    }},
+    'Documents':{type:'dir',children:{}},
+    'hello.c':{type:'file',content:'#include <stdio.h>\nint main(void){printf("hello\\n");return 0;}'}
+  }};
+  var cwd=[];
+  var out=$('#cmdOut'),input=$('#cmdInput'),prompt=$('#cmdPrompt');
+  function cnode(path){var n=CFS;for(var i=0;i<path.length;i++){n=n.children[path[i]];}return n;}
+  function cwdStr(){return 'C:\\Users\\Admin'+(cwd.length?'\\'+cwd.join('\\'):'');}
+  function print(txt,cls){var d=document.createElement('div');if(cls)d.className=cls;d.textContent=txt;out.appendChild(d);out.scrollTop=out.scrollHeight;}
+  function promptSet(){prompt.textContent=cwdStr()+'>';}
+  function listDir(){var n=cnode(cwd);var names=Object.keys(n.children);if(!names.length){print('（空目录）');return;}names.forEach(function(nm){var f=n.children[nm];print((f.type==='dir'?'<DIR>  ':'       ')+nm);});}
+  function run(line){print(cwdStr()+'>'+line,'in');var parts=line.trim().split(/\s+/);var cmd=(parts[0]||'').toLowerCase();var arg=parts.slice(1).join(' ');
+    if(!cmd){return;}
+    switch(cmd){
+      case 'help':print('可用: dir cd mkdir rd del copy move ren type cls echo tree ipconfig ping ver help');break;
+      case 'dir':listDir();break;
+      case 'cd':
+        if(!arg){print(cwdStr());}
+        else if(arg==='..'){cwd.pop();}
+        else if(arg==='\\'||arg==='/'){cwd=[];}
+        else{var t=cnode(cwd).children[arg];if(t&&t.type==='dir'){cwd.push(arg);}else{print('系统找不到指定的路径: '+arg,'err');}}
+        break;
+      case 'mkdir':if(!arg){print('用法: mkdir 名','err');}else if(cnode(cwd).children[arg]){print('已存在: '+arg,'err');}else{cnode(cwd).children[arg]={type:'dir',children:{}};print('已创建目录 '+arg);}break;
+      case 'rd':var rd=cnode(cwd).children[arg];if(rd&&rd.type==='dir'){if(Object.keys(rd.children).length){print('目录非空，无法删除（沙盒保护）','err');}else{delete cnode(cwd).children[arg];print('已删除空目录 '+arg);}}else{print('找不到目录: '+arg,'err');}break;
+      case 'del':var dl=cnode(cwd).children[arg];if(dl&&dl.type==='file'){delete cnode(cwd).children[arg];print('已删除文件 '+arg+'（沙盒内，不可逆）');}else{print('找不到文件: '+arg,'err');}break;
+      case 'echo':print(arg||'ECHO 处于打开状态');break;
+      case 'cls':out.innerHTML='';break;
+      case 'type':var tf=cnode(cwd).children[arg];if(tf&&tf.type==='file'){print(tf.content);}else{print('找不到文件: '+arg,'err');}break;
+      case 'tree':(function walk(n,pre){Object.keys(n.children).forEach(function(nm){var f=n.children[nm];print(pre+'├─ '+nm);if(f.type==='dir')walk(f,pre+'│  ');});})(cnode(cwd),'');break;
+      case 'ren':var rp=arg.split(/\s+/);var rf=cnode(cwd).children[rp[0]];if(rf&&rp[1]){cnode(cwd).children[rp[1]]=rf;delete cnode(cwd).children[rp[0]];print('已改名 '+rp[0]+' → '+rp[1]);}else{print('用法: ren 旧 新','err');}break;
+      case 'copy':var cp=arg.split(/\s+/);var cf=cnode(cwd).children[cp[0]];if(cf&&cf.type==='file'&&cp[1]){cnode(cwd).children[cp[1]]={type:'file',content:cf.content};print('已复制 '+cp[0]+' → '+cp[1]);}else{print('用法: copy 源 目标','err');}break;
+      case 'move':var mp=arg.split(/\s+/);var mf=cnode(cwd).children[mp[0]];if(mf&&mp[1]){cnode(cwd).children[mp[1]]=mf;delete cnode(cwd).children[mp[0]];print('已移动 '+mp[0]+' → '+mp[1]);}else{print('用法: move 源 目标','err');}break;
+      case 'ipconfig':print('Windows IP 配置\n  以太网适配器: 192.168.1.10\n  默认网关: 192.168.1.1');break;
+      case 'ping':print('正在 Ping '+(arg||'localhost')+' …\n  回复: 字节=32 时间=23ms TTL=117\n  回复: 字节=32 时间=21ms TTL=117\n  丢失 = 0 (0% 丢失)');break;
+      case 'ver':print('Microsoft Windows [版本 10.0.x · 沙盒模拟]');break;
+      default:print("'"+cmd+"' 不是内部或外部命令，也不是可运行的程序。输入 help 查看可用命令。",'err');
+    }
+    promptSet();}
+  input.addEventListener('keydown',function(e){if(e.key==='Enter'){var v=input.value;input.value='';run(v);}});
+  ['dir','cd Desktop','cd suite','dir','cd ..','cd ..','mkdir test','echo hello','type hello.c','tree','cls'].forEach(function(c){var b=document.createElement('button');b.type='button';b.textContent=c;b.onclick=function(){run(c);};$('#cmdQuick').appendChild(b);});
+  print('Microsoft Windows [沙盒模拟 CMD]');print('输入 help 查看可用命令；这里不会动你真实文件。');promptSet();
+
+  // ---- ai cards ----
+  var CHAT=[
+    {n:'DeepSeek',d:'chat.deepseek.com',u:'https://chat.deepseek.com',p:'代码与数学推理强，开源生态好。',v:'写代码 / 查逻辑 / 解释报错'},
+    {n:'Kimi',d:'kimi.moonshot.cn',u:'https://kimi.moonshot.cn',p:'超长上下文，读长文档/论文/总结。',v:'深度阅读 / 文献分析'},
+    {n:'通义千问',d:'tongyi.aliyun.com',u:'https://tongyi.aliyun.com',p:'模型全家桶+开源，多轮对话/代码理解。',v:'通用问答 / 阿里生态'},
+    {n:'文心一言',d:'yiyan.baidu.com',u:'https://yiyan.baidu.com',p:'中文写作/知识整合，搜索融合。',v:'中文写作 / 办公'},
+    {n:'智谱清言',d:'chatglm.cn',u:'https://chatglm.cn',p:'GLM 开源透明，代码/多轮对话。',v:'开发者 / 科研'},
+    {n:'豆包',d:'doubao.com',u:'https://www.doubao.com',p:'日常问答/创作/文生图，上手顺手。',v:'日常助手 / 创作'}
+  ];
+  var AGENT=[
+    {n:'扣子 Coze',d:'coze.cn',u:'https://www.coze.cn',p:'可视化搭智能体/工作流，插件丰富。',v:'自己搭任务型助手'},
+    {n:'文心智能体',d:'agents.baidu.com',u:'https://agents.baidu.com',p:'百度 AgentBuilder，创建/训练/部署。',v:'搭建与分发智能体'},
+    {n:'Kimi+',d:'kimiplus-square',u:'https://kimi.moonshot.cn/kimiplus-square',p:'官方智能体广场，长文本+工具调用。',v:'挑现成智能体直接用'},
+    {n:'通义智能体',d:'qianwen/agent',u:'https://tongyi.aliyun.com/qianwen/agent/home',p:'阿里系智能体入口。',v:'场景化智能体'},
+    {n:'智谱智能体',d:'toolsCenter',u:'https://chatglm.cn/main/toolsCenter',p:'GLM 工具/智能体中心。',v:'开发者工具中心'},
+    {n:'腾讯元器',d:'yuanqi.tencent.com',u:'https://yuanqi.tencent.com',p:'混元系智能体商店与开发。',v:'智能体商店'}
+  ];
+  function fill(id,arr){var box=$(id);arr.forEach(function(a){var c=document.createElement('div');c.className='ai-card';c.innerHTML='<div class="nm">'+a.n+'</div><a class="dm" href="'+a.u+'" target="_blank" rel="noopener">'+a.d+'</a><p>'+a.p+'</p><div class="val"><b>价值</b> · '+a.v+'</div>';box.appendChild(c);});}
+  fill('#aiChat',CHAT);fill('#aiAgent',AGENT);
+})();
+</script>
+</body>
+</html>

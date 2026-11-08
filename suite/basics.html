@@ -133,6 +133,13 @@ kbd{border:1.5px solid var(--ink);box-shadow:2px 2px 0 var(--ink);background:var
 .ai-card p{font-size:12.5px;color:var(--ink2);flex:1}
 .ai-card .val{font-size:11.5px;border-top:1.5px dashed var(--hair);padding-top:8px;color:var(--ink)}
 .ai-card .val b{color:var(--gold2)}
+.sw-cat{font-family:var(--mono);font-size:9.5px;background:var(--ink);color:var(--gold);padding:1px 6px;margin-right:7px;vertical-align:2px;letter-spacing:.1em}
+.steps{counter-reset:s;list-style:none;margin:8px 0 0}
+.steps li{position:relative;padding-left:32px;margin-bottom:9px;font-size:13.5px;color:var(--ink2)}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:0;width:21px;height:21px;background:var(--gold);border:1.5px solid var(--ink);font-family:var(--mono);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.steps li b{color:var(--ink)}
+.note-line.danger{border-left-color:var(--red);background:#F4E1DC}
+.note-line.danger b{color:var(--red)}
 .check{border:2px solid var(--ink);background:var(--card);box-shadow:7px 7px 0 var(--ink);padding:22px}
 .check li{list-style:none;margin-bottom:9px;font-size:14px;padding-left:26px;position:relative}
 .check li::before{content:"";position:absolute;left:0;top:4px;width:14px;height:14px;border:2px solid var(--ink);background:var(--white)}
@@ -163,7 +170,7 @@ footer a{color:var(--gold)}
     <div>
       <p class="kicker">机器人与人工智能创新协会 · 电控组培训</p>
       <h1>电脑基础<br><span class="goldblock">与效率工具</span></h1>
-      <p class="lead">在写第一行代码之前，先把电脑用顺：快捷键、文件与后缀、命令行、GitHub 加速、国内 AI 工具。这一课不写代码，只练手上功夫。</p>
+      <p class="lead">在写第一行代码之前，先把电脑用顺：快捷键、文件与后缀、命令行、GitHub 加速、国内 AI 工具，再到装机必备软件与系统小技巧。这一课不写代码，只练手上功夫。</p>
       <div class="hero-meta"><span>零基础友好</span><span>前置课</span><span>动手交互</span></div>
       <div style="display:flex;gap:14px;flex-wrap:wrap">
         <a class="btn btn-gold" href="#m1">开始练 →</a>
@@ -186,7 +193,7 @@ footer a{color:var(--gold)}
 </section>
 
 <div class="ticker"><div class="ticker-track" id="tickerTrack">
-  <span>快捷键练成肌肉记忆</span><b>★</b><span>看清后缀再双击</span><b>★</b><span>删除命令不可逆</span><b>★</b><span>加速只走官方渠道</span><b>★</b><span>AI 会幻觉 要验证</span><b>★</b>
+  <span>快捷键练成肌肉记忆</span><b>★</b><span>看清后缀再双击</span><b>★</b><span>删除命令不可逆</span><b>★</b><span>加速只走官方渠道</span><b>★</b><span>AI 会幻觉 要验证</span><b>★</b><span>软件只认官网</span><b>★</b><span>杀毒只装一个</span><b>★</b><span>防火墙用完重开</span><b>★</b>
 </div></div>
 
 <div class="wrap layout">
@@ -197,6 +204,7 @@ footer a{color:var(--gold)}
     <a href="#m3"><span class="no">03</span>CMD 终端入门</a>
     <a href="#m4"><span class="no">04</span>GitHub 合法加速</a>
     <a href="#m5"><span class="no">05</span>国内 AI 与智能体</a>
+    <a href="#m6"><span class="no">06</span>装机软件与系统技巧</a>
     <a href="#check"><span class="no">◆</span>结业清单</a>
   </nav>
 
@@ -347,6 +355,62 @@ footer a{color:var(--gold)}
       </div>
     </section>
 
+    <section class="sec rv" id="m6">
+      <div class="sec-head">
+        <p class="kicker">MODULE 06</p>
+        <h2>装机必备软件与系统小技巧</h2>
+        <div class="rule"></div>
+        <p class="desc">新电脑先把这几样装上、把几个系统设置弄明白，后面学 Git / VSCode / C 会顺很多。铁律：所有软件只从官网 / 微软商店 / 官方 GitHub Releases 下载，别点搜索广告位的假官网，别用下载站的高速下载器。</p>
+      </div>
+      <div class="panel">
+        <h3><span class="tag">必备</span>装机软件清单</h3>
+        <div class="ai-grid" id="swGrid"></div>
+        <div class="note-line"><b>解压怎么选：</b>日常 7-Zip 就够（免费开源）；常收发 <code>.rar</code> 想要图形化顺手再装 WinRAR，装一个即可。<b>截图备选：</b>SnowShot 之外，<a href="https://zh.snipaste.com" target="_blank" rel="noopener">Snipaste</a>（贴图钉屏经典）、<a href="https://pixpin.cn" target="_blank" rel="noopener">PixPin</a>（长截图 + OCR）按喜好挑一个。</div>
+      </div>
+      <div class="panel">
+        <h3><span class="tag">杀毒</span>火绒：一台电脑只装一个</h3>
+        <p style="font-size:14px;color:var(--ink2);margin-bottom:12px"><a href="https://www.huorong.cn" target="_blank" rel="noopener">火绒安全</a>（微软商店搜"火绒"也可）：轻量、无广告、自带<b>弹窗拦截</b>，对国内软件全家桶的弹窗很有效。Windows 自带的 Defender 其实已经够用，装火绒主要图它的弹窗拦截和轻巧；装了火绒后 Defender 通常会自动让位。</p>
+        <div class="note-line danger"><b>最重要：一台电脑只装一个杀毒 / 安全软件。</b>同时装 360、腾讯电脑管家、火绒等多个，会互相拦截、抢占资源，把电脑拖得很卡甚至蓝屏。要换就先用 Geek 把旧的卸干净再装新的。别用"破解版杀毒"——安全软件拥有系统最高权限，来源不明等于把钥匙交给别人。</div>
+      </div>
+      <div class="panel">
+        <h3><span class="tag">防火墙</span>临时关闭（务必看完警告）</h3>
+        <p style="font-size:14px;color:var(--ink2);margin-bottom:10px">什么时候才动它：局域网联机 / 开发调试 / 本地服务被拦。<b>优先不是"全关"，而是"放行那个程序"：</b>控制面板 → Windows Defender 防火墙 → 左侧"允许应用或功能通过 Windows Defender 防火墙" → 找到 / 添加你的程序 → 勾选"专用 / 公用" → 确定。这样只放行它，其余照样拦。</p>
+        <h3 style="margin-top:16px"><span class="tag">步骤</span>确实要临时全关</h3>
+        <ol class="steps">
+          <li><kbd>Win</kbd> + <kbd>R</kbd> → 输入 <code>firewall.cpl</code> → 回车，打开防火墙面板。</li>
+          <li>左侧点"启用或关闭 Windows Defender 防火墙"。</li>
+          <li>把"专用网络"和"公用网络"都选"关闭 Windows Defender 防火墙" → 确定。</li>
+          <li>做完要做的调试 / 联机。</li>
+          <li><b>立刻回到同一处，重新选"启用" → 确定。</b></li>
+        </ol>
+        <div class="note-line danger"><b>⚠ 强警告：</b>防火墙是挡外部入侵的一道墙，关闭期间电脑更容易被攻击。用完<b>马上重开</b>，绝不永久关闭；关闭期间不要下载不明文件、不要访问陌生网站、不要连公共 Wi-Fi 做敏感操作；<b>公用网络尤其别关</b>，要关也只关"专用网络"；能"放行单个程序"就别"全关"，这是最小风险做法。</div>
+      </div>
+      <div class="panel">
+        <h3><span class="tag">技巧</span>右键新建文件（改后缀法）</h3>
+        <p style="font-size:14px;color:var(--ink2);margin-bottom:6px">想新建 <code>.md</code> / <code>.c</code> / <code>.html</code> / <code>.py</code>，但右键"新建"默认只有文本文档 / Office。最简单安全的办法：</p>
+        <ol class="steps">
+          <li>先打开"<b>显示文件扩展名</b>"（见模块二），否则改不到真后缀。</li>
+          <li>文件夹空白处 <b>右键 → 新建 → 文本文档</b>，得到 <code>新建文本文档.txt</code>。</li>
+          <li>选中按 <kbd>F2</kbd> 重命名，把整个名字改成 <code>hello.c</code> / <code>note.md</code> / <code>index.html</code>。</li>
+          <li>回车，弹"如果改变文件扩展名，可能导致文件不可用" → 点"<b>是</b>"。</li>
+          <li>图标 / 类型随之变化，双击就用对应程序打开了。</li>
+        </ol>
+        <div class="note-line">改后缀<b>不会转换内容</b>，只是告诉系统"用什么打开"。一个空 <code>.txt</code> 改成 <code>.c</code> 就是个空 C 文件，照样能写代码。</div>
+        <div class="note-line"><b>进阶原理（了解即可，新手别手动改注册表）：</b>右键"新建"菜单里有哪些项，由注册表里各后缀下的 <code>ShellNew</code> 子键决定；给某后缀补一个 <code>ShellNew</code> 项，它就进"新建"菜单。改注册表有风险，确有需要用现成脚本 / 工具且<b>改前先备份</b>。日常用上面的"改后缀法"完全够用。</div>
+      </div>
+      <div class="panel">
+        <h3><span class="tag">避坑</span>下载与安装</h3>
+        <table>
+          <tr><th>坑</th><th>怎么避</th></tr>
+          <tr><td>假官网 / 搜索广告</td><td>只认上表官网域名，带"广告"标的、域名奇怪的别点</td></tr>
+          <tr><td>下载站高速下载器捆绑</td><td>优先官网直链 / 微软商店 / 官方 Releases</td></tr>
+          <tr><td>安装附带全家桶</td><td>选"自定义安装"，取消"装 XX 浏览器 / 设 XX 首页"等勾选</td></tr>
+          <tr><td>卸载留残留</td><td>用 Geek 卸，比系统自带扫得更干净</td></tr>
+          <tr><td>压缩包里直接运行</td><td>先解压再用，别在压缩包里双击 <code>.exe</code></td></tr>
+        </table>
+      </div>
+    </section>
+
     <section class="sec rv" id="check">
       <div class="sec-head"><p class="kicker">CHECKLIST</p><h2>结业自查清单</h2><div class="rule"></div></div>
       <ul class="check">
@@ -356,6 +420,8 @@ footer a{color:var(--gold)}
         <li>会在 CMD 里 dir / cd / mkdir / echo / cls，知道删除不可逆。</li>
         <li>会用 Watt Toolkit 合法加速 GitHub，只从官方渠道下载。</li>
         <li>至少用过 2 个 AI 官网 + 1 个智能体广场，知道幻觉与隐私边界。</li>
+        <li>装好 7-Zip / Everything / Geek 等必备软件，全部来自官网；杀毒只装一个。</li>
+        <li>会"右键新建文本文档→改后缀"造出 .c/.md/.html；知道防火墙优先放行程序、临时关闭后立刻重开。</li>
       </ul>
       <div class="note-line" style="margin-top:18px">下一步：<a href="git.html">Git × GitHub 入门</a> → <a href="vscode.html">VSCode 环境配置</a> → <a href="../c/index.html">C 语言学习教程</a>。</div>
     </section>
@@ -522,6 +588,17 @@ footer a{color:var(--gold)}
   ];
   function fill(id,arr){var box=$(id);arr.forEach(function(a){var c=document.createElement('div');c.className='ai-card';c.innerHTML='<div class="nm">'+a.n+'</div><a class="dm" href="'+a.u+'" target="_blank" rel="noopener">'+a.d+'</a><p>'+a.p+'</p><div class="val"><b>价值</b> · '+a.v+'</div>';box.appendChild(c);});}
   fill('#aiChat',CHAT);fill('#aiAgent',AGENT);
+
+  // ---- software cards ----
+  var SOFTWARE=[
+    {n:'7-Zip',cat:'解压',d:'7-zip.org',u:'https://7-zip.org',p:'免费开源无广告，支持 7z/zip/rar 等几乎所有格式。',v:'首选解压，装一个就够'},
+    {n:'WinRAR',cat:'解压',d:'rarlab.com',u:'https://rarlab.com',p:'老牌，对 .rar 支持好；共享软件，试用到期弹"请购买"（可继续用）。',v:'常收发 .rar 时备选'},
+    {n:'Everything',cat:'搜索',d:'voidtools.com',u:'https://www.voidtools.com',p:'秒搜全盘文件名（NTFS 索引），找文件不用慢慢翻；中文站 /zh-cn/。',v:'文件搜索神器'},
+    {n:'Geek Uninstaller',cat:'卸载',d:'geekuninstaller.com',u:'https://geekuninstaller.com',p:'卸载后自动扫注册表 / 文件夹残留，单文件免安装。',v:'卸得干净少留垃圾'},
+    {n:'NDM',cat:'下载',d:'neatdownloadmanager.com',u:'https://www.neatdownloadmanager.com',p:'Neat Download Manager，多线程下载器。',v:'IDM 的免费替代'},
+    {n:'SnowShot',cat:'截图',d:'snowshot.top',u:'https://snowshot.top',p:'开源截图：长截图 / 滚动截图 / OCR / 贴图钉屏 / 取色。',v:'截图贴图全能'}
+  ];
+  (function(){var box=$('#swGrid');SOFTWARE.forEach(function(a){var c=document.createElement('div');c.className='ai-card';c.innerHTML='<div class="nm"><span class="sw-cat">'+a.cat+'</span>'+a.n+'</div><a class="dm" href="'+a.u+'" target="_blank" rel="noopener">'+a.d+'</a><p>'+a.p+'</p><div class="val"><b>价值</b> · '+a.v+'</div>';box.appendChild(c);});})();
 })();
 </script>
 </body>

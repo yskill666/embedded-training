@@ -6,7 +6,7 @@
 <title>机器人与人工智能创新协会 · 电控组培训 · 总主页</title>
 <style>
 /* ══════════ 先锋构成主义 · 电控组培训总主页 ══════════
-   红 / 黄 / 蓝 / 绿 / 灰 / 白 · 三角圆矩形六角 · 一根线串起四张便签
+   红 / 黄 / 蓝 / 绿 / 灰 / 白 · 三角圆矩形六角 · 一块木板固定四张横排卡牌
    配色身份：主页红黄黑白 · Git 红 · VSCode 蓝 · C 绿 · 单片机灰 */
 :root{
   --paper:#EDE4D0; --paper2:#E2D6BC; --card:#F7F2E6; --white:#FBF8F1;
@@ -119,47 +119,48 @@ a{color:var(--red)}
 .sec-head .rule{width:120px;height:7px;margin-top:18px;background:linear-gradient(90deg,var(--red) 0 25%,var(--gold) 25% 50%,var(--blue) 50% 75%,var(--green) 75% 100%);border:1.5px solid var(--ink)}
 .sec-head p.desc{color:var(--ink2);font-size:15.5px;max-width:44em;margin-top:18px}
 
-/* 晾衣绳 · 一根线串起四张便签 */
+/* 木板固定 · 横排卡牌（宽屏横向木板 rail，窄屏竖向木桩） */
 .line-sec{overflow:hidden;background-image:linear-gradient(var(--paper2) 1px,transparent 1px),linear-gradient(90deg,var(--paper2) 1px,transparent 1px);background-size:46px 46px}
 .line-geo{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .lg-hex{position:absolute;width:180px;height:180px;border:0;background:var(--blue);clip-path:var(--hex);opacity:.08;top:30px;right:-40px}
 .lg-tri{position:absolute;width:150px;height:150px;background:var(--gold);clip-path:polygon(50% 0,100% 100%,0 100%);opacity:.12;bottom:10px;left:-30px}
 .lg-circle{position:absolute;width:120px;height:120px;border-radius:50%;background:var(--green);opacity:.08;top:120px;left:48%}
-.clothesline{position:relative;z-index:2;padding-top:104px;margin-top:6px}
-.thread{position:absolute;top:47px;left:-12px;right:-12px;height:5px;background:var(--ink);z-index:1}
-.thread::before,.thread::after{content:"";position:absolute;top:-8px;width:19px;height:19px;border-radius:50%;border:3px solid var(--ink)}
-.thread::before{left:-4px;background:var(--gold)}
-.thread::after{right:-4px;background:var(--red2)}
-.notes{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start}
-.note{position:relative;display:flex;flex-direction:column;background:var(--white);border:2px solid var(--ink);box-shadow:7px 7px 0 var(--ink);padding:32px 22px 24px;margin-top:var(--drop,0px);transform:rotate(var(--rot,0deg));transform-origin:top center;transition:transform .2s,box-shadow .2s;text-decoration:none;color:var(--ink)}
-.note:hover{transform:rotate(0deg) translateY(-7px);box-shadow:12px 12px 0 var(--ink);z-index:6}
-.clip{position:absolute;left:50%;top:calc(-51px - var(--drop,0px));transform:translateX(-50%);width:15px;height:calc(55px + var(--drop,0px));background:var(--ink);z-index:4}
-.clip::before{content:"";position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:19px;height:19px;border-radius:50%;background:var(--nc);border:3px solid var(--ink)}
-.clip::after{content:"";position:absolute;top:9px;left:50%;transform:translateX(-50%);width:5px;height:calc(100% - 18px);background:var(--paper2)}
-.note-tape{position:absolute;top:0;left:0;right:0;height:11px;background:var(--nc);border-bottom:2px solid var(--ink)}
-.note-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-.note-no{font-family:var(--mono);font-weight:700;font-size:30px;line-height:1;color:var(--nc)}
-.note-icon{width:42px;height:42px;flex:none}
+.clothesline{position:relative;z-index:2;margin-top:10px}
+.board{position:absolute;top:0;left:-14px;right:-14px;height:34px;z-index:1;border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);background:repeating-linear-gradient(90deg,rgba(0,0,0,.07) 0 2px,transparent 2px 19px),linear-gradient(180deg,#A9825A 0%,#8B6A45 46%,#7A5C3C 54%,#8B6A45 100%)}
+.board::before,.board::after{content:"";position:absolute;top:50%;width:16px;height:16px;margin-top:-8px;border-radius:50%;border:2px solid var(--ink);background:radial-gradient(circle at 35% 30%,#E8E2D4,#9A9488 60%,#5A5448)}
+.board::before{left:11px}
+.board::after{right:11px}
+.notes{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:22px;align-items:start;padding-top:22px}
+.note{position:relative;display:flex;flex-direction:column;background:var(--white);border:2px solid var(--ink);box-shadow:7px 7px 0 var(--ink);padding:20px 16px 16px;transform:rotate(var(--rot,0deg));transform-origin:top center;transition:transform .2s,box-shadow .2s;text-decoration:none;color:var(--ink)}
+.note:hover{transform:rotate(0deg) translateY(-6px);box-shadow:11px 11px 0 var(--ink);z-index:6}
+.screw{position:absolute;top:8px;width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink);z-index:5;background:radial-gradient(circle at 35% 30%,#E8E2D4,#9A9488 60%,#5A5448)}
+.screw::after{content:"";position:absolute;top:50%;left:2px;right:2px;height:1.5px;margin-top:-.75px;background:var(--ink);transform:rotate(35deg)}
+.screw-l{left:11px}
+.screw-r{right:11px}
+.note-tape{position:absolute;top:0;left:0;right:0;height:8px;background:var(--nc);border-bottom:2px solid var(--ink)}
+.note-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px;margin-bottom:9px}
+.note-no{font-family:var(--mono);font-weight:700;font-size:23px;line-height:1;color:var(--nc)}
+.note-icon{width:32px;height:32px;flex:none}
 .i-git{background:var(--red);clip-path:var(--star)}
 .i-vs{background:var(--blue);clip-path:polygon(0 0,100% 0,100% 72%,72% 72%,72% 100%,0 100%)}
 .i-c{background:var(--green);clip-path:var(--hex)}
 .i-mcu{background:var(--gray);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
-.note h3{font-size:20px;font-weight:900;line-height:1.25;margin-bottom:7px}
-.note-en{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:13px}
-.note p{font-size:13.5px;color:var(--ink2);flex:1;margin-bottom:16px}
-.note-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
-.note-tags span{font-family:var(--mono);font-size:10.5px;border:1.5px solid var(--ink);padding:2px 8px;background:var(--paper)}
-.note-btn{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;font-weight:800;font-size:13px;border:2px solid var(--ink);padding:8px 16px;background:var(--nc);color:var(--white);box-shadow:4px 4px 0 var(--ink);transition:transform .15s,box-shadow .15s}
+.note h3{font-size:17.5px;font-weight:900;line-height:1.2;margin-bottom:4px}
+.note-en{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:8px}
+.note p{font-size:12px;line-height:1.5;color:var(--ink2);flex:1;margin-bottom:11px}
+.note-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.note-tags span{font-family:var(--mono);font-size:9.5px;border:1.5px solid var(--ink);padding:1px 7px;background:var(--paper)}
+.note-btn{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:12px;border:2px solid var(--ink);padding:6px 13px;background:var(--nc);color:var(--white);box-shadow:4px 4px 0 var(--ink);transition:transform .15s,box-shadow .15s}
 .note:hover .note-btn{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
 
-/* 单片机预留便签 */
+/* 单片机预留卡牌 */
 .note.soon{background:var(--paper2);border-style:dashed;box-shadow:7px 7px 0 var(--hair);cursor:default}
 .note.soon:hover{transform:rotate(var(--rot,0deg));box-shadow:7px 7px 0 var(--hair);z-index:2}
-.note.soon .note-tape{background:repeating-linear-gradient(-45deg,var(--gray) 0 10px,var(--paper2) 10px 20px)}
+.note.soon .note-tape{background:repeating-linear-gradient(-45deg,var(--gray) 0 8px,var(--paper2) 8px 16px)}
 .note.soon h3{color:var(--ink2)}
 .note.soon .note-btn{background:var(--paper);color:var(--gray);border-style:dashed;border-color:var(--gray);box-shadow:none;cursor:not-allowed}
 .note.soon:hover .note-btn{transform:none;box-shadow:none}
-.soon-stamp{position:absolute;top:16px;right:-36px;transform:rotate(38deg);background:var(--gold);border:2px solid var(--ink);font-family:var(--mono);font-weight:700;font-size:10px;letter-spacing:.14em;padding:3px 40px;color:var(--ink);z-index:7}
+.soon-stamp{position:absolute;top:14px;right:-34px;transform:rotate(38deg);background:var(--gold);border:2px solid var(--ink);font-family:var(--mono);font-weight:700;font-size:9.5px;letter-spacing:.12em;padding:3px 36px;color:var(--ink);z-index:7}
 
 /* 学习路径条 */
 .pathline{display:flex;align-items:stretch;gap:0;border:2px solid var(--ink);background:var(--card);box-shadow:7px 7px 0 var(--ink);margin-top:54px;flex-wrap:wrap;position:relative;z-index:2}
@@ -212,16 +213,20 @@ footer a:hover{color:var(--paper);text-decoration:underline}
   .topbar .wrap{flex-direction:column;align-items:flex-start;gap:3px}
 }
 @media (max-width:1000px){
-  .clothesline{padding-top:16px;padding-left:6px;max-width:600px;margin-left:auto;margin-right:auto}
-  .thread{top:6px;bottom:6px;left:14px;right:auto;width:5px;height:auto}
-  .thread::before{top:-8px;left:-8px;right:auto}
-  .thread::after{top:auto;bottom:-8px;left:-8px;right:auto}
-  .notes{grid-template-columns:1fr;gap:26px;padding-left:46px}
-  .note{margin-top:0}
-  .clip{display:none}
-  .note::before{content:"";position:absolute;left:-39px;top:26px;width:18px;height:18px;border-radius:50%;background:var(--nc);border:3px solid var(--ink);z-index:4}
-  .note::after{content:"";position:absolute;left:-23px;top:33px;width:17px;height:4px;background:var(--ink);z-index:3}
-  .soon-stamp{right:-30px}
+  .notes{grid-template-columns:repeat(2,1fr);gap:24px}
+}
+@media (max-width:760px){
+  .clothesline{padding-left:50px;max-width:660px;margin-left:auto;margin-right:auto}
+  .board{top:0;bottom:0;left:16px;right:auto;width:30px;height:auto;box-shadow:4px 4px 0 var(--ink);background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 2px,transparent 2px 19px),linear-gradient(90deg,#A9825A 0%,#8B6A45 46%,#7A5C3C 54%,#8B6A45 100%)}
+  .board::before{left:50%;top:11px;margin-top:0;margin-left:-8px}
+  .board::after{left:50%;right:auto;top:auto;bottom:11px;margin-top:0;margin-left:-8px}
+  .notes{grid-template-columns:1fr;gap:22px;padding-top:0}
+  .note{transform:rotate(0deg)}
+  .note:hover{transform:translateY(-4px)}
+  .note.soon:hover{transform:none}
+  .screw-l{left:-27px;top:16px}
+  .screw-r{left:-27px;right:auto;top:auto;bottom:16px}
+  .soon-stamp{right:-26px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -253,7 +258,7 @@ footer a:hover{color:var(--paper);text-decoration:underline}
     <div>
       <p class="kicker">机器人与人工智能创新协会 · 电控组培训</p>
       <h1>电控组<br><span class="redblock">新生培训</span></h1>
-      <p class="lead">从注册 GitHub、搭好 VSCode，到系统学完 C 语言，再迈向单片机。一根线串起四张便签，也串起整条新生成长路线 —— 揭下对应便签，开始学。</p>
+      <p class="lead">从注册 GitHub、搭好 VSCode，到系统学完 C 语言，再迈向单片机。一块木板固定四张卡牌，也串起整条新生成长路线 —— 点开对应卡牌，开始学。</p>
       <div class="hero-meta">
         <span><b>03</b> 门已就绪</span>
         <span><b>01</b> 门待增补</span>
@@ -297,55 +302,55 @@ footer a:hover{color:var(--paper);text-decoration:underline}
     <div class="wrap">
       <div class="sec-head rv">
         <p class="kicker">Training Suite / 培训套件</p>
-        <h2>四门课程，一根线串起</h2>
+        <h2>四门课程，一块木板固定</h2>
         <div class="rule"></div>
-        <p class="desc">从协作工具到开发环境，再到 C 语言基础，最后迈向单片机硬件。四张便签对应四门课，颜色就是各自的身份 —— 点进去就能开始学，建议按编号顺序推进。</p>
+        <p class="desc">从协作工具到开发环境，再到 C 语言基础，最后迈向单片机硬件。四张卡牌对应四门课，颜色就是各自的身份 —— 点进去就能开始学，建议按编号顺序推进。</p>
       </div>
 
       <div class="clothesline rv">
-        <div class="thread" aria-hidden="true"></div>
+        <div class="board" aria-hidden="true"></div>
         <div class="notes">
-          <a class="note" style="--nc:var(--red);--rot:-3deg;--drop:0px" href="GitHub注册与Git安装配置教程.html">
-            <span class="clip" aria-hidden="true"></span>
+          <a class="note" style="--nc:var(--red);--rot:-1.5deg" href="GitHub注册与Git安装配置教程.html">
+            <span class="screw screw-l" aria-hidden="true"></span><span class="screw screw-r" aria-hidden="true"></span>
             <span class="note-tape" aria-hidden="true"></span>
             <div class="note-head"><span class="note-no">01</span><span class="note-icon i-git" aria-hidden="true"></span></div>
             <h3>Git × GitHub 入门</h3>
             <span class="note-en">协作入口 · Step 01</span>
-            <p>注册 GitHub、安装 Git、配好身份与 SSH 密钥，三步打通现代协作开发的入口。</p>
+            <p>注册 GitHub、装好 Git、配好身份与 SSH 密钥，打通协作入口。</p>
             <div class="note-tags"><span>零基础</span><span>Windows</span><span>约 30 分钟</span></div>
             <span class="note-btn">进入教程 →</span>
           </a>
 
-          <a class="note" style="--nc:var(--blue);--rot:2.5deg;--drop:24px" href="C语言学习前导与VSCode环境配置.html">
-            <span class="clip" aria-hidden="true"></span>
+          <a class="note" style="--nc:var(--blue);--rot:1.5deg" href="C语言学习前导与VSCode环境配置.html">
+            <span class="screw screw-l" aria-hidden="true"></span><span class="screw screw-r" aria-hidden="true"></span>
             <span class="note-tape" aria-hidden="true"></span>
             <div class="note-head"><span class="note-no">02</span><span class="note-icon i-vs" aria-hidden="true"></span></div>
             <h3>C 语言前导 × VSCode</h3>
             <span class="note-en">开发环境 · Step 02</span>
-            <p>认识编译器与编辑器，装好 VSCode 与 MinGW，配置扩展，跑通第一个程序。</p>
+            <p>装好 VSCode 与 MinGW，配置扩展，跑通第一个程序。</p>
             <div class="note-tags"><span>环境搭建</span><span>MinGW</span><span>第一个程序</span></div>
             <span class="note-btn">进入教程 →</span>
           </a>
 
-          <a class="note" style="--nc:var(--green);--rot:-2deg;--drop:8px" href="../C语言培训/C语言学习教程.html">
-            <span class="clip" aria-hidden="true"></span>
+          <a class="note" style="--nc:var(--green);--rot:-1deg" href="../C语言培训/C语言学习教程.html">
+            <span class="screw screw-l" aria-hidden="true"></span><span class="screw screw-r" aria-hidden="true"></span>
             <span class="note-tape" aria-hidden="true"></span>
             <div class="note-head"><span class="note-no">03</span><span class="note-icon i-c" aria-hidden="true"></span></div>
             <h3>C 语言学习教程</h3>
             <span class="note-en">语言基础 · Step 03</span>
-            <p>从第一个程序到指针与递归：58 章 · 17 模块 · 3 场考核，含交互演示，边学边练。</p>
+            <p>58 章 · 17 模块 · 3 场考核，从第一个程序到指针与递归。</p>
             <div class="note-tags"><span>58 章</span><span>17 模块</span><span>3 场考核</span></div>
             <span class="note-btn">进入教程 →</span>
           </a>
 
-          <div class="note soon" style="--nc:var(--gray);--rot:3deg;--drop:32px" aria-disabled="true">
-            <span class="clip" aria-hidden="true"></span>
+          <div class="note soon" style="--nc:var(--gray);--rot:1.5deg" aria-disabled="true">
+            <span class="screw screw-l" aria-hidden="true"></span><span class="screw screw-r" aria-hidden="true"></span>
             <span class="note-tape" aria-hidden="true"></span>
             <span class="soon-stamp">敬请期待</span>
             <div class="note-head"><span class="note-no">04</span><span class="note-icon i-mcu" aria-hidden="true"></span></div>
             <h3>单片机学习</h3>
             <span class="note-en">硬件进阶 · Step 04</span>
-            <p>学完 C 语言后进入 STM32：寄存器、GPIO、串口、中断，把代码烧进真实硬件。</p>
+            <p>学完 C 后进入 STM32：寄存器、GPIO、串口、中断。</p>
             <div class="note-tags"><span>待增补</span><span>STM32</span><span>嵌入式</span></div>
             <span class="note-btn">敬请期待 · 待增补</span>
           </div>

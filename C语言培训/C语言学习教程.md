@@ -660,7 +660,7 @@ printf("%zu\n", strlen("c:\test\328\test.c"));   // 输出 14
 #### 12.5 实战：打印 Windows 路径
 
 ```c
-printf("C:\\Users\\qjy\\Desktop\n");   // 每个 \ 都要写成 \\
+printf("C:\\Users\\Admin\\Desktop\n");   // 每个 \ 都要写成 \\
 ```
 
 【练习】写出 `printf("a\tb\nc");` 的输出样子；计算 `strlen("ab\0cd")`（提示：结合下一章，答案是 2）。
